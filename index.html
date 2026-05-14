@@ -3,106 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSee Dashboard</title>
-    <!-- টেলিগ্রামের সাথে কানেক্ট করার স্ক্রিপ্ট -->
+    <title>AdSee Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     
     <style>
         body {
-            background-color: #0b1426; /* ডার্ক ব্যাকগ্রাউন্ড */
+            background-color: #0b1426;
             color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding-bottom: 80px; /* মেনু বারের জন্য জায়গা */
         }
-        .container {
-            width: 100%;
-            max-width: 400px;
-        }
-        .header {
-            width: 100%;
-            margin-bottom: 25px;
-        }
+        .header { margin-bottom: 25px; }
+        
+        /* ব্যালেন্স কার্ড */
         .balance-card {
-            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            background: linear-gradient(135deg, #6366f1, #a855f7);
             padding: 25px;
             border-radius: 24px;
             text-align: center;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
         }
-        .balance-title { font-size: 14px; opacity: 0.9; margin-bottom: 8px; }
-        .balance-amount { font-size: 36px; font-weight: bold; margin-bottom: 15px; }
+        .balance-amount { font-size: 36px; font-weight: bold; margin: 10px 0; }
         
-        .stats-row {
-            display: flex;
-            justify-content: space-around;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
             border-top: 1px solid rgba(255,255,255,0.2);
             padding-top: 15px;
+            margin-top: 15px;
         }
-        .stat-box { text-align: center; font-size: 12px; }
-        .stat-value { display: block; font-weight: bold; font-size: 16px; }
+        .stat-box { font-size: 11px; opacity: 0.8; }
+        .stat-value { display: block; font-size: 14px; font-weight: bold; }
 
+        /* বাটন */
         .btn-watch {
             background-color: #f59e0b;
-            color: #000;
+            color: black;
             border: none;
             width: 100%;
             padding: 16px;
-            border-radius: 12px;
+            border-radius: 15px;
             font-size: 18px;
             font-weight: bold;
-            margin-top: 20px;
+            margin-top: 25px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
         }
+
+        /* বটম নেভিগেশন */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #161f33;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid #2d3748;
+        }
+        .nav-item {
+            text-align: center;
+            color: #718096;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .nav-item.active { color: #6366f1; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h1 id="user-name">Hello!</h1>
-            <p style="opacity: 0.7; margin-top: -10px;">Welcome to your AdSee dashboard.</p>
-        </div>
-
-        <div class="balance-card">
-            <div class="balance-title">Total Balance</div>
-            <div class="balance-amount">$33.630</div>
-            
-            <div class="stats-row">
-                <div class="stat-box"><span class="stat-value">$0.00</span>Withdrawn</div>
-                <div class="stat-box"><span class="stat-value">576</span>Ads Watched</div>
-                <div class="stat-box"><span class="stat-value">3</span>Referrals</div>
-            </div>
-        </div>
-
-        <button class="btn-watch">⚡ Watch Pop Up Ad</button>
+    <div class="header">
+        <h2 id="user-greeting">Hello!</h2>
+        <p style="opacity: 0.6; margin-top: -10px;">Let's earn some money today!</p>
     </div>
 
-    <script>
-        // টেলিগ্রাম অ্যাপ কনফিগারেশন
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // অ্যাপটি বড় করে ওপেন হবে
+    <div class="balance-card">
+        <div style="font-size: 14px; opacity: 0.9;">Total Balance</div>
+        <div class="balance-amount">$33.630</div>
+        <div class="stats-grid">
+            <div class="stat-box"><span class="stat-value">$0.000</span>Withdrawn</div>
+            <div class="stat-box"><span class="stat-value">576</span>Ads Watched</div>
+            <div class="stat-box"><span class="stat-value">3</span>Referrals</div>
+        </div>
+    </div>
 
-        // টেলিগ্রাম থেকে ইউজারের নাম নেওয়া
+    <button class="btn-watch" onclick="showAd()">⚡ Watch Pop Up Ad</button>
+
+    <!-- নিচের মেনু বার -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active"><i class="fas fa-home"></i>Home</a>
+        <a href="#" class="nav-item"><i class="fas fa-tasks"></i>Tasks</a>
+        <a href="#" class="nav-item"><i class="fas fa-users"></i>Refer</a>
+        <a href="#" class="nav-item"><i class="fas fa-wallet"></i>Wallet</a>
+        <a href="#" class="nav-item"><i class="fas fa-user"></i>Profile</a>
+    </nav>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        // ইউজারের নাম সেট করা
         const user = tg.initDataUnsafe?.user;
         if (user) {
-            document.getElementById('user-name').innerText = "Hello, " + user.first_name + "!";
+            document.getElementById('user-greeting').innerText = "Hello, " + user.first_name + "!";
         }
-        document.querySelector('.btn-watch').addEventListener('click', function() {
-        tg.showAlert("বিজ্ঞাপনটি লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।");
-        });
-        document.querySelector('.btn-watch').onclick = function() {
-    tg.MainButton.setText("Loading Ad...");
-    tg.MainButton.show();
-    tg.showAlert("বিজ্ঞাপন দেখার সিস্টেমটি শীঘ্রই চালু হবে!");
-};
-        
+
+        function showAd() {
+            tg.showConfirm("আপনি কি বিজ্ঞাপনটি দেখতে চান?", function(confirmed) {
+                if (confirmed) {
+                    tg.showAlert("বিজ্ঞাপন লোড হচ্ছে... (সিস্টেমটি ডেভেলপমেন্ট মোডে আছে)");
+                }
+            });
+        }
     </script>
 </body>
 </html>
-
