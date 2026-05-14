@@ -93,6 +93,10 @@
         if (user) {
             document.getElementById('user-name').innerText = "Hello, " + user.first_name + "!";
         }
+        document.querySelector('.btn-watch').addEventListener('click', function() {
+        tg.showAlert("বিজ্ঞাপনটি লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।");
+        });
+        
     </script>
 </body>
 </html>
