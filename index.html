@@ -96,6 +96,11 @@
         document.querySelector('.btn-watch').addEventListener('click', function() {
         tg.showAlert("বিজ্ঞাপনটি লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।");
         });
+        document.querySelector('.btn-watch').onclick = function() {
+    tg.MainButton.setText("Loading Ad...");
+    tg.MainButton.show();
+    tg.showAlert("বিজ্ঞাপন দেখার সিস্টেমটি শীঘ্রই চালু হবে!");
+};
         
     </script>
 </body>
