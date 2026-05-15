@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSee$ Pro Dashboard</title>
+    <title>AdSee$ All-in-One</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,32 +15,32 @@
 
         /* Header Styles */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 10px 0; }
-        .profile-icon { background: #6366f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+        .profile-icon { background: #6366f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-        /* Balance Card */
-        .balance-card { background: linear-gradient(135deg, #4f46e5, #9333ea); padding: 25px; border-radius: 25px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .balance-amount { font-size: 38px; font-weight: bold; margin: 5px 0; }
+        /* Home/Dashboard Cards */
+        .balance-card { background: linear-gradient(135deg, #4f46e5, #9333ea); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
+        .balance-amount { font-size: 38px; font-weight: bold; }
         .stats-grid { display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; font-size: 12px; }
+        .btn-main { background: #f59e0b; color: black; border: none; width: 100%; padding: 18px; border-radius: 15px; font-size: 16px; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        /* Button Styles */
-        .btn-main { background: #f59e0b; color: black; border: none; width: 100%; padding: 18px; border-radius: 15px; font-size: 16px; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
-        .btn-reset { background: #1e293b; color: #94a3b8; border: none; width: 100%; padding: 12px; border-radius: 12px; font-size: 14px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        /* Task Page Styles */
+        .task-card-header { background: #161f33; padding: 20px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #1f2937; }
+        .task-item { background: #161f33; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1f2937; margin-bottom: 12px; }
+        .btn-locked { background: #1e293b; color: #94a3b8; border: none; padding: 8px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; }
 
-        /* Referral Card */
+        /* Refer Page Styles */
         .refer-card { background: linear-gradient(135deg, #10b981, #059669); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
-        .refer-link-box { background: #161f33; padding: 20px; border-radius: 20px; border: 1px solid #1f2937; }
-        .link-display { background: #0b1426; padding: 12px; border-radius: 10px; border: 1px solid #1f2937; margin: 15px 0; font-size: 12px; color: #6366f1; word-break: break-all; }
+        .link-box { background: #161f33; padding: 15px; border-radius: 12px; border: 1px solid #1f2937; margin: 15px 0; font-size: 12px; color: #6366f1; word-break: break-all; }
 
         /* Withdrawal Sheet */
-        #withdraw-overlay { position: fixed; top: 100%; left: 0; width: 100%; height: 85%; background: #0e121e; border-radius: 30px 30px 0 0; z-index: 1000; padding: 25px; transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box; box-shadow: 0 -10px 40px rgba(0,0,0,0.6); }
+        #withdraw-overlay { position: fixed; top: 100%; left: 0; width: 100%; height: 85%; background: #0e121e; border-radius: 30px 30px 0 0; z-index: 1000; padding: 25px; transition: top 0.4s ease; box-sizing: border-box; }
         #withdraw-overlay.open { top: 15%; }
-        .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
-        .method-box { background: #161f33; padding: 15px; border-radius: 15px; text-align: center; font-size: 11px; border: 1.5px solid transparent; cursor: pointer; transition: 0.2s; }
-        .method-box.selected { border-color: #6366f1; background: rgba(99,102,241,0.1); }
+        .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        .method-box { background: #161f33; padding: 10px; border-radius: 12px; text-align: center; font-size: 10px; border: 1px solid #1f2937; }
 
-        /* Nav Bar */
+        /* Navigation Bar */
         .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1f2937; z-index: 900; }
-        .nav-item { text-align: center; color: #4b5563; font-size: 11px; flex: 1; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .nav-item { text-align: center; color: #4b5563; font-size: 11px; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
         .nav-item.active { color: #6366f1; }
         .nav-item i { font-size: 24px; margin-bottom: 4px; }
     </style>
@@ -58,10 +58,9 @@
             <div class="stats-grid">
                 <div><strong>$0.000</strong><br><span style="opacity:0.6">Withdrawn</span></div>
                 <div><strong>621</strong><br><span style="opacity:0.6">Ads Watched</span></div>
-                <div><strong>5</strong><br><span style="opacity:0.6">Referrals</span></div>
+                <div><strong>3</strong><br><span style="opacity:0.6">Referrals</span></div>
             </div>
         </div>
-        <button class="btn-reset"><i class="material-icons" style="font-size:18px;">history_toggle_off</i> Reset in: 14:29:41</button>
         <button class="btn-main" onclick="tg.showAlert('অ্যাড লোড হচ্ছে...')"><i class="material-icons">bolt</i> Watch Pop Up Ad</button>
         <div style="background: #161f33; padding: 20px; border-radius: 20px;">
             <p style="margin:0 0 15px 0; font-size: 14px; font-weight: bold;">Income Stats (7D)</p>
@@ -69,22 +68,28 @@
         </div>
     </div>
 
+    <div id="task" class="page">
+        <h2 style="margin-bottom: 20px;">Tasks</h2>
+        <div class="task-card-header">
+            <h3 style="margin:0">Visit website and complet task</h3>
+            <p style="opacity:0.6; font-size:12px; margin-top:5px;">Earn coins by completing tasks.</p>
+        </div>
+        <div id="task-list-container"></div>
+    </div>
+
     <div id="refer" class="page">
-        <h2>Refer</h2>
+        <h2 style="margin-bottom: 20px;">Refer</h2>
         <div class="refer-card">
             <p style="font-size: 16px; margin-bottom: 20px; width: 85%;">Invite friends and earn bonus for every join.</p>
             <div style="display: flex; gap: 40px;">
-                <div><strong style="font-size: 24px;">5</strong><br><span style="font-size: 12px; opacity: 0.8;">Referrals</span></div>
+                <div><strong style="font-size: 24px;">3</strong><br><span style="font-size: 12px; opacity: 0.8;">Referrals</span></div>
                 <div><strong style="font-size: 24px;">$2.500</strong><br><span style="font-size: 12px; opacity: 0.8;">Total Earned</span></div>
             </div>
         </div>
-        <div class="refer-link-box">
+        <div style="background: #161f33; padding: 20px; border-radius: 20px;">
             <p style="font-size: 14px; color: #a0a0a0;">Your Referral Link</p>
-            <div class="link-display" id="user-link">Loading...</div>
-            <div style="display: flex; gap: 12px;">
-                <button onclick="copyLink()" style="flex:1; background:#6366f1; color:white; border:none; padding:15px; border-radius:12px; font-weight:bold;">Copy</button>
-                <button onclick="shareLink()" style="flex:1; background:#2563eb; color:white; border:none; padding:15px; border-radius:12px; font-weight:bold;">Share</button>
-            </div>
+            <div class="link-box" id="user-link">Loading...</div>
+            <button onclick="copyLink()" style="width:100%; background:#6366f1; color:white; border:none; padding:15px; border-radius:12px; font-weight:bold;">Copy Link</button>
         </div>
     </div>
 
@@ -93,76 +98,78 @@
             <h2 style="margin:0">Withdrawal</h2>
             <i class="material-icons" onclick="toggleWallet()" style="cursor:pointer">close</i>
         </div>
-        <p style="font-size:12px; color:#a0a0a0; margin-top:20px;">Select Payment Method</p>
         <div class="method-grid">
-            <div class="method-box" onclick="sel(this)">bKash</div>
-            <div class="method-box" onclick="sel(this)">Binance</div>
-            <div class="method-box" onclick="sel(this)">USDT</div>
-            <div class="method-box" onclick="sel(this)">Litecoin</div>
-            <div class="method-box" onclick="sel(this)">Webmoney</div>
-            <div class="method-box" onclick="sel(this)">M-PESA</div>
+            <div class="method-box">bKash</div><div class="method-box">Binance</div><div class="method-box">USDT</div>
+            <div class="method-box">Litecoin</div><div class="method-box">Webmoney</div><div class="method-box">M-PESA</div>
         </div>
-        <input type="text" style="width:100%; padding:15px; background:#161f33; border:1px solid #1f2937; border-radius:12px; color:white; box-sizing:border-box;" placeholder="Enter account details">
-        <button style="width:100%; padding:18px; background:#16a34a; border:none; border-radius:15px; color:white; font-weight:bold; margin-top:20px;" onclick="tg.showAlert('Withdrawal Request Sent!')">Withdraw Now</button>
+        <input type="text" style="width:100%; padding:15px; background:#161f33; border:1px solid #1f2937; border-radius:12px; color:white; box-sizing:border-box;" placeholder="Account Details">
+        <button style="width:100%; padding:18px; background:#16a34a; border:none; border-radius:15px; color:white; font-weight:bold; margin-top:20px;" onclick="tg.showAlert('Request Sent!')">Withdraw Now</button>
     </div>
 
     <nav class="nav-bar">
         <div class="nav-item active" onclick="nav('home', this)"><i class="material-icons">home</i>Home</div>
-        <div class="nav-item" onclick="tg.showAlert('Task page coming soon!')"><i class="material-icons">task</i>Tasks</div>
+        <div class="nav-item" onclick="nav('task', this)"><i class="material-icons">task</i>Tasks</div>
         <div class="nav-item" onclick="nav('refer', this)"><i class="material-icons">people</i>Refer</div>
         <div class="nav-item" onclick="toggleWallet()"><i class="material-icons">account_balance_wallet</i>Wallet</div>
-        <div class="nav-item" onclick="nav('home', this)"><i class="material-icons">person</i>Profile</div>
+        <div class="nav-item" onclick="nav('home', this)"><i class="material-icons">menu</i>Menu</div>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // ১. নেভিগেশন লজিক
+        // ১. পেজ নেভিগেশন
         function nav(pageId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById(pageId).classList.add('active-page');
             el.classList.add('active');
+            if(pageId === 'task') generateTasks();
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        // ২. ওয়ালেট / উইথড্র লজিক
+        // ২. উইথড্র শিট কন্ট্রোল
         function toggleWallet() {
             document.getElementById('withdraw-overlay').classList.toggle('open');
             tg.HapticFeedback.impactOccurred('medium');
         }
 
-        function sel(el) {
-            document.querySelectorAll('.method-box').forEach(b => b.classList.remove('selected'));
-            el.classList.add('selected');
-            tg.HapticFeedback.selectionChanged();
+        // ৩. ৬০টি টাস্ক জেনারেশন
+        function generateTasks() {
+            const container = document.getElementById('task-list-container');
+            container.innerHTML = "";
+            for (let i = 1; i <= 60; i++) {
+                container.innerHTML += `
+                    <div class="task-item">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="material-icons" style="color:#94a3b8">list_alt</i>
+                            <div><div style="font-size:13px; font-weight:bold;">Task #${i}</div><div style="font-size:11px; color:#6366f1;">+50 Coins</div></div>
+                        </div>
+                        <div style="text-align:right;">
+                            <button class="btn-locked">Locked</button>
+                            <div style="font-size:9px; color:#ec4899; margin-top:3px;">06:00:${10+i}</div>
+                        </div>
+                    </div>`;
+            }
         }
 
-        // ৩. রেফার লিঙ্ক লজিক
+        // ৪. রেফার লিঙ্ক
         const uid = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "6026482193";
         const link = `https://t.me/Finova1_bot?startapp=${uid}`;
         document.getElementById('user-link').innerText = link;
+        function copyLink() { navigator.clipboard.writeText(link); tg.showAlert("Copied!"); }
 
-        function copyLink() {
-            navigator.clipboard.writeText(link);
-            tg.showAlert("Link Copied!");
-        }
-
-        function shareLink() {
-            tg.openTelegramLink(`https://t.me/share/url?url=${link}&text=Join and Earn!`);
-        }
-
-        // ৪. ইনকাম চার্ট
+        // ৫. চার্ট রেন্ডার
         const ctx = document.getElementById('incomeChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                datasets: [{ data: [0, 1.15, 1.15, 1.20, 1.20, 2.11, 1.05], backgroundColor: '#6366f1', borderRadius: 6 }]
+                datasets: [{ data: [0.1, 1.15, 1.15, 1.20, 1.20, 2.11, 1.05], backgroundColor: '#6366f1', borderRadius: 5 }]
             },
             options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#94a3b8' } } } }
         });
     </script>
 </body>
 </html>
+
