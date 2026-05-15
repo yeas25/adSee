@@ -3,79 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSee Pro</title>
+    <title>AdSee Dashboard</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        body {
-            background-color: #0b1426;
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 20px;
-            padding-bottom: 100px;
-            user-select: none; /* টেক্সট সিলেক্ট হওয়া বন্ধ করবে */
-        }
-
+        /* আপনার বর্তমান ডিজাইনের CSS এখানে থাকবে (আগের কোড থেকে নিতে পারেন) */
+        body { background-color: #0b1426; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; padding-bottom: 100px; }
         .top-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-        .menu-btn { background: none; border: none; color: white; cursor: pointer; padding: 10px; display: flex; align-items: center; border-radius: 50%; transition: 0.2s; }
-        .menu-btn:active { background: rgba(255,255,255,0.1); }
-        
-        .user-info h2 { margin: 0; font-size: 20px; }
-        .user-info p { margin: 0; opacity: 0.6; font-size: 12px; }
-
-        .balance-card {
-            background: linear-gradient(135deg, #4f46e5, #9333ea);
-            padding: 25px;
-            border-radius: 25px;
-            margin-bottom: 15px;
-        }
+        .menu-btn { background: none; border: none; color: white; cursor: pointer; }
+        .balance-card { background: linear-gradient(135deg, #4f46e5, #9333ea); padding: 25px; border-radius: 25px; margin-bottom: 15px; }
         .balance-amount { font-size: 36px; font-weight: bold; margin: 10px 0; }
-        
-        .stats-row { display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; }
-        .stat-item { text-align: center; }
-        .stat-item span { display: block; font-weight: bold; }
-        .stat-item label { font-size: 10px; opacity: 0.7; }
-
-        .btn-reset {
-            background: #1e293b; color: #94a3b8; border: none; width: 100%;
-            padding: 12px; border-radius: 12px; margin-bottom: 15px;
-            display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer;
-        }
-
-        .btn-watch {
-            background: #f59e0b; color: black; border: none; width: 100%;
-            padding: 16px; border-radius: 12px; font-size: 18px; font-weight: bold;
-            display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-watch:active { transform: scale(0.98); opacity: 0.9; }
-
-        .chart-card { background: #161f33; padding: 20px; border-radius: 20px; margin-top: 20px; }
-
-        .nav-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #111827; display: flex; justify-content: space-around;
-            padding: 12px 0; border-top: 1px solid #1f2937; z-index: 1000;
-        }
-        .nav-item {
-            text-align: center; color: #4b5563; text-decoration: none; font-size: 11px;
-            flex: 1; display: flex; flex-direction: column; align-items: center; cursor: pointer;
-        }
+        .btn-watch { background: #f59e0b; color: black; border: none; width: 100%; padding: 16px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1f2937; }
+        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 11px; flex: 1; cursor: pointer; }
         .nav-item.active { color: #6366f1; }
-        .nav-item i { font-size: 24px; margin-bottom: 3px; }
+        .nav-item i { display: block; font-size: 24px; margin-bottom: 3px; }
     </style>
 </head>
 <body>
 
     <div class="top-header">
-        <button class="menu-btn" id="mainMenu">
-            <i class="material-icons">menu</i>
-        </button>
+        <button id="menuButton" class="menu-btn"><i class="material-icons">menu</i></button>
         <div class="user-info">
-            <h2 id="user-name">Yeachin!</h2>
+            <h2 id="userNameDisplay">Yeachin!</h2>
             <p>Let's earn some money today!</p>
         </div>
     </div>
@@ -83,95 +35,62 @@
     <div class="balance-card">
         <label style="font-size: 12px; opacity: 0.8;">Total Balance</label>
         <div class="balance-amount">$36.790</div>
-        <div class="stats-row">
-            <div class="stat-item"><span>$0.000</span><label>Withdrawn</label></div>
-            <div class="stat-item"><span>621</span><label>Ads Watched</label></div>
-            <div class="stat-item"><span>3</span><label>Referrals</label></div>
-        </div>
     </div>
 
-    <button class="btn-reset" onclick="handleReset()">
-        <i class="material-icons" style="font-size: 18px;">history_toggle_off</i> Reset in: 14:29:41
-    </button>
-
-    <button class="btn-watch" onclick="handleWatchAd()">
+    <button id="watchAdBtn" class="btn-watch">
         <i class="material-icons">bolt</i> Watch Pop Up Ad
     </button>
 
-    <div class="chart-card">
-        <p style="margin:0 0 10px 0; font-weight: bold; font-size: 14px;">Income Stats (7D)</p>
+    <div style="background: #161f33; padding: 20px; border-radius: 20px; margin-top: 20px;">
         <canvas id="incomeChart" height="140"></canvas>
     </div>
 
     <nav class="nav-bar">
-        <div class="nav-item active" onclick="navClick(this, 'Home')">
-            <i class="material-icons">home</i>Home
-        </div>
-        <div class="nav-item" onclick="navClick(this, 'Tasks')">
-            <i class="material-icons">task</i>Tasks
-        </div>
-        <div class="nav-item" onclick="navClick(this, 'Refer')">
-            <i class="material-icons">people</i>Refer
-        </div>
-        <div class="nav-item" onclick="navClick(this, 'Wallet')">
-            <i class="material-icons">account_balance_wallet</i>Wallet
-        </div>
-        <div class="nav-item" onclick="navClick(this, 'Profile')">
-            <i class="material-icons">person_outline</i>Profile
-        </div>
+        <div class="nav-item active" data-name="Home"><i class="material-icons">home</i>Home</div>
+        <div class="nav-item" data-name="Tasks"><i class="material-icons">task</i>Tasks</div>
+        <div class="nav-item" data-name="Refer"><i class="material-icons">people</i>Refer</div>
+        <div class="nav-item" data-name="Wallet"><i class="material-icons">account_balance_wallet</i>Wallet</div>
+        <div class="nav-item" data-name="Profile"><i class="material-icons">person_outline</i>Profile</div>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // মেনু বাটনের জন্য ইভেন্ট লিসেনার
-        document.getElementById('mainMenu').onclick = function() {
+        // ১. মেনু বাটন ক্লিক লজিক
+        document.getElementById('menuButton').addEventListener('click', () => {
             tg.HapticFeedback.impactOccurred('light');
-            tg.showAlert("মেনু অপশনটি ডেভেলপ করা হচ্ছে।");
-        };
+            tg.showAlert("মেনু ক্লিক হয়েছে!");
+        });
 
-        function handleReset() {
-            tg.HapticFeedback.notificationOccurred('warning');
-            tg.showAlert("রিসেট টাইম এখনো শেষ হয়নি। অনুগ্রহ করে অপেক্ষা করুন।");
-        }
-
-        function handleWatchAd() {
+        // ২. ওয়াচ অ্যাড বাটন ক্লিক লজিক
+        document.getElementById('watchAdBtn').addEventListener('click', () => {
             tg.HapticFeedback.impactOccurred('medium');
-            tg.showConfirm("আপনি কি বিজ্ঞাপনটি দেখে ইনকাম করতে চান?", (ok) => {
-                if(ok) tg.showAlert("বিজ্ঞাপনটি লোড হচ্ছে...");
+            tg.showConfirm("আপনি কি বিজ্ঞাপনটি দেখতে চান?", (confirmed) => {
+                if (confirmed) tg.showAlert("বিজ্ঞাপন লোড হচ্ছে...");
             });
-        }
+        });
 
-        function navClick(el, name) {
-            // সব বাটন থেকে active ক্লাস রিমুভ করা
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            // ক্লিক করা বাটনে active ক্লাস যোগ করা
-            el.classList.add('active');
-            // হ্যাপটিক ফিডব্যাক
-            tg.HapticFeedback.selectionChanged();
-            console.log("Page: " + name);
-        }
+        // ৩. নেভিগেশন বাটন ক্লিক লজিক
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                tg.HapticFeedback.selectionChanged();
+                console.log("Selected: " + this.getAttribute('data-name'));
+            });
+        });
 
-        // Chart
+        // চার্ট কোড (আগের মতোই থাকবে)
         const ctx = document.getElementById('incomeChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                datasets: [{
-                    data: [0.0, 1.15, 1.15, 1.20, 1.20, 2.11, 1.05],
-                    backgroundColor: '#6366f1',
-                    borderRadius: 6,
-                }]
+                datasets: [{ data: [0, 1.15, 1.15, 1.2, 1.2, 2.11, 1.05], backgroundColor: '#6366f1', borderRadius: 6 }]
             },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { display: false },
-                    x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } }
-                }
-            }
+            options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
         });
     </script>
 </body>
