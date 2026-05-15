@@ -3,123 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSee Pro</title>
+    <title>Finovaa Clone</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         body {
             background-color: #0b1426;
             color: white;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            padding-bottom: 80px; /* মেনু বারের জন্য জায়গা */
+            padding-bottom: 100px;
         }
-        .header { margin-bottom: 25px; }
-        
+
+        /* প্রোফাইল হেডার */
+        .profile-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-icon {
+            background: #6366f1;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+        }
+
         /* ব্যালেন্স কার্ড */
         .balance-card {
-            background: linear-gradient(135deg, #6366f1, #a855f7);
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
             padding: 25px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-radius: 30px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
-        .balance-amount { font-size: 36px; font-weight: bold; margin: 10px 0; }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+        .balance-card::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .balance-amount { font-size: 38px; font-weight: bold; margin: 10px 0; }
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.2);
             padding-top: 15px;
-            margin-top: 15px;
         }
-        .stat-box { font-size: 11px; opacity: 0.8; }
-        .stat-value { display: block; font-size: 14px; font-weight: bold; }
+        .stat-item { text-align: center; }
+        .stat-item span { display: block; font-weight: bold; font-size: 16px; }
+        .stat-item label { font-size: 11px; opacity: 0.7; }
 
-        /* বাটন */
+        /* বাটন স্টাইল */
+        .btn-reset {
+            background: #252d4a;
+            color: #94a3b8;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
         .btn-watch {
-            background-color: #f59e0b;
+            background: #f59e0b;
             color: black;
             border: none;
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             border-radius: 15px;
             font-size: 18px;
             font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        /* চার্ট কার্ড */
+        .chart-card {
+            background: #161f33;
+            padding: 20px;
+            border-radius: 25px;
             margin-top: 25px;
-            cursor: pointer;
         }
 
         /* বটম নেভিগেশন */
-        .bottom-nav {
+        .nav-bar {
             position: fixed;
             bottom: 0;
             left: 0;
-            right: 0;
-            background-color: #161f33;
+            width: 100%;
+            background: #111827;
             display: flex;
             justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid #2d3748;
+            padding: 15px 0;
+            border-top: 1px solid #1f2937;
         }
         .nav-item {
             text-align: center;
-            color: #718096;
+            color: #4b5563;
             text-decoration: none;
             font-size: 12px;
         }
         .nav-item.active { color: #6366f1; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-item i { display: block; font-size: 24px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2 id="user-greeting">Hello!</h2>
-        <p style="opacity: 0.6; margin-top: -10px;">Let's earn some money today!</p>
-    </div>
-
-    <div class="balance-card">
-        <div style="font-size: 14px; opacity: 0.9;">Total Balance</div>
-        <div class="balance-amount">$33.630</div>
-        <div class="stats-grid">
-            <div class="stat-box"><span class="stat-value">$0.000</span>Withdrawn</div>
-            <div class="stat-box"><span class="stat-value">576</span>Ads Watched</div>
-            <div class="stat-box"><span class="stat-value">3</span>Referrals</div>
+    <div class="profile-section">
+        <div>
+            <h2 id="name" style="margin:0">Hello, Yeachin!</h2>
+            <p style="margin:5px 0; opacity: 0.6; font-size: 14px;">Let's earn some money today!</p>
+        </div>
+        <div class="profile-icon">
+            <i class="material-icons">person</i>
         </div>
     </div>
 
-    <button class="btn-watch" onclick="showAd()">⚡ Watch Pop Up Ad</button>
+    <div class="balance-card">
+        <label style="font-size: 13px; opacity: 0.8;">Total Balance</label>
+        <div class="balance-amount">$36.790</div>
+        <div class="stats-row">
+            <div class="stat-item"><span>$0.000</span><label>Withdrawn</label></div>
+            <div class="stat-item"><span>621</span><label>Ads Watched</label></div>
+            <div class="stat-item"><span>3</span><label>Referrals</label></div>
+        </div>
+    </div>
 
-    <!-- নিচের মেনু বার -->
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item active"><i class="fas fa-home"></i>Home</a>
-        <a href="#" class="nav-item"><i class="fas fa-tasks"></i>Tasks</a>
-        <a href="#" class="nav-item"><i class="fas fa-users"></i>Refer</a>
-        <a href="#" class="nav-item"><i class="fas fa-wallet"></i>Wallet</a>
-        <a href="#" class="nav-item"><i class="fas fa-user"></i>Profile</a>
+    <button class="btn-reset">
+        <i class="material-icons" style="font-size: 18px;">play_arrow</i> Reset in: 14:29:41
+    </button>
+
+    <button class="btn-watch" onclick="startAd()">
+        <i class="material-icons">bolt</i> Watch Pop Up Ad
+    </button>
+
+    <div class="chart-card">
+        <p style="margin-top:0; font-weight: bold;">Income Stats (7D)</p>
+        <canvas id="incomeChart" height="150"></canvas>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="#" class="nav-item active"><i class="material-icons">home</i>Home</a>
+        <a href="#" class="nav-item"><i class="material-icons">list_alt</i>Tasks</a>
+        <a href="#" class="nav-item"><i class="material-icons">groups</i>Refer</a>
+        <a href="#" class="nav-item"><i class="material-icons">account_balance_wallet</i>Wallet</a>
+        <a href="#" class="nav-item"><i class="material-icons">person_outline</i>Profile</a>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // ইউজারের নাম সেট করা
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-            document.getElementById('user-greeting').innerText = "Hello, " + user.first_name + "!";
-        }
-
-        function showAd() {
-            tg.showConfirm("আপনি কি বিজ্ঞাপনটি দেখতে চান?", function(confirmed) {
-                if (confirmed) {
-                    tg.showAlert("বিজ্ঞাপন লোড হচ্ছে... (সিস্টেমটি ডেভেলপমেন্ট মোডে আছে)");
+        // গ্রাফ তৈরি করার কোড
+        const ctx = document.getElementById('incomeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                datasets: [{
+                    label: 'Income',
+                    data: [0.0, 1.15, 1.15, 1.20, 1.20, 2.11, 1.05],
+                    backgroundColor: '#6366f1',
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false }, ticks: { color: '#94a3b8' } },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
                 }
-            });
+            }
+        });
+
+        function startAd() {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.showAlert("বিজ্ঞাপন সিস্টেমটি প্রসেস করা হচ্ছে...");
         }
     </script>
 </body>
 </html>
-
