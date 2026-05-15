@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSee$ Final</title>
+    <title>AdSee$ Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,51 +13,120 @@
         .active-page { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Balance Card */
+        /* Dashboard & Cards */
         .balance-card { background: linear-gradient(135deg, #4f46e5, #9333ea); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
         .balance-amount { font-size: 38px; font-weight: bold; }
+        .stats-grid { display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; font-size: 12px; }
         
-        /* Task & Wallet Common Styles */
+        /* Common Box Style */
         .card-box { background: #161f33; padding: 20px; border-radius: 20px; border: 1px solid #1f2937; margin-bottom: 15px; }
         .item-row { background: #161f33; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1f2937; margin-bottom: 10px; }
         
         /* Refer Card */
         .refer-card { background: linear-gradient(135deg, #10b981, #059669); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
 
-        /* Form Inputs */
+        /* Form Controls */
         .form-input { width: 100%; padding: 15px; background: #0b1426; border: 1px solid #1f2937; border-radius: 12px; color: white; margin-top: 10px; box-sizing: border-box; }
         .btn-green { width: 100%; padding: 18px; background: #16a34a; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; }
-
-        /* Navigation */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1f2937; z-index: 999; }
-        .nav-item { text-align: center; color: #4b5563; font-size: 11px; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-        .nav-item.active { color: #6366f1; }
-        .nav-item i { font-size: 24px; margin-bottom: 4px; }
+        .btn-blue { width: 100%; background: #6366f1; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
         /* Payment Methods Grid */
         .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
         .method-box { background: #0b1426; padding: 12px; border-radius: 12px; text-align: center; font-size: 11px; border: 1px solid #1f2937; cursor: pointer; }
         .method-box.selected { border-color: #6366f1; background: rgba(99,102,241,0.1); }
+
+        /* Navigation Bar */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1f2937; z-index: 999; }
+        .nav-item { text-align: center; color: #4b5563; font-size: 11px; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        .nav-item.active { color: #6366f1; }
+        .nav-item i { font-size: 24px; margin-bottom: 4px; }
+
+        /* Withdraw List Item */
+        .withdraw-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1f2937; }
+        .withdraw-list-item:last-child { border-bottom: none; }
+        .status-success { color: #10b981; font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div id="home" class="page active-page">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2>Hello, Yeachin!</h2>
-            <div style="background:#6366f1; padding:10px; border-radius:50%;"><i class="material-icons">person</i></div>
+            <div>
+                <h2 style="margin: 0;">Hello, Yeachin!</h2>
+                <p style="opacity:0.6; font-size:13px; margin: 5px 0 0 0;">Let's earn some money today!</p>
+            </div>
+            <div style="background:#6366f1; width: 45px; height: 45px; border-radius:50%; display: flex; align-items: center; justify-content: center;"><i class="material-icons">person</i></div>
         </div>
+        
         <div class="balance-card">
             <span style="font-size: 13px;">Total Balance</span>
             <div class="balance-amount">$36.790</div>
-            <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; font-size: 12px;">
-                <div>$0.000<br>Withdrawn</div>
-                <div>621<br>Ads Watched</div>
-                <div>3<br>Referrals</div>
+            <div class="stats-grid">
+                <div><strong>$0.000</strong><br>Withdrawn</div>
+                <div><strong>621</strong><br>Ads Watched</div>
+                <div><strong>3</strong><br>Referrals</div>
             </div>
         </div>
-        <button onclick="tg.showAlert('Ad Loading...')" style="background:#f59e0b; width:100%; padding:18px; border-radius:15px; border:none; font-weight:bold;">Watch Pop Up Ad</button>
-        <div class="card-box" style="margin-top:20px;">
+
+        <div class="card-box">
+            <p style="margin: 0 0 15px 0; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                <i class="material-icons" style="color: #10b981;">history</i> Last 5 Withdraw List
+            </p>
+            <div id="last-withdrawals">
+                <div class="withdraw-list-item">
+                    <div>
+                        <div style="font-size: 13px; font-weight: bold;">bKash (017******82)</div>
+                        <div style="font-size: 11px; opacity: 0.5;">2 hours ago</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 13px; font-weight: bold;">$10.50</div>
+                        <div class="status-success">Success</div>
+                    </div>
+                </div>
+                <div class="withdraw-list-item">
+                    <div>
+                        <div style="font-size: 13px; font-weight: bold;">Binance Pay</div>
+                        <div style="font-size: 11px; opacity: 0.5;">5 hours ago</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 13px; font-weight: bold;">$5.00</div>
+                        <div class="status-success">Success</div>
+                    </div>
+                </div>
+                <div class="withdraw-list-item">
+                    <div>
+                        <div style="font-size: 13px; font-weight: bold;">USDT (TRC20)</div>
+                        <div style="font-size: 11px; opacity: 0.5;">Yesterday</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 13px; font-weight: bold;">$25.00</div>
+                        <div class="status-success">Success</div>
+                    </div>
+                </div>
+                <div class="withdraw-list-item">
+                    <div>
+                        <div style="font-size: 13px; font-weight: bold;">bKash (019******14)</div>
+                        <div style="font-size: 11px; opacity: 0.5;">1 day ago</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 13px; font-weight: bold;">$7.20</div>
+                        <div class="status-success">Success</div>
+                    </div>
+                </div>
+                <div class="withdraw-list-item">
+                    <div>
+                        <div style="font-size: 13px; font-weight: bold;">Litecoin Address</div>
+                        <div style="font-size: 11px; opacity: 0.5;">2 days ago</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 13px; font-weight: bold;">$12.00</div>
+                        <div class="status-success">Success</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-box">
             <p style="margin:0 0 15px 0; font-weight:bold;">Income Stats (7D)</p>
             <canvas id="incomeChart" height="150"></canvas>
         </div>
@@ -67,7 +136,7 @@
         <h2>Tasks</h2>
         <div class="card-box" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
             <h3 style="margin:0">Visit website and complet task</h3>
-            <p style="opacity:0.6; font-size:12px;">Complete 60 daily tasks to earn rewards.</p>
+            <p style="opacity:0.6; font-size:12px; margin-top: 5px;">Complete 60 daily tasks to earn rewards.</p>
         </div>
         <div id="task-list"></div>
     </div>
@@ -77,14 +146,14 @@
         <div class="refer-card">
             <p style="font-size: 16px; margin-bottom: 20px;">Invite friends and earn bonus for every join.</p>
             <div style="display: flex; gap: 30px;">
-                <div><strong>5</strong><br><span style="font-size:12px;">Referrals</span></div>
-                <div><strong>$2.500</strong><br><span style="font-size:12px;">Earned</span></div>
+                <div><strong>3</strong><br><span style="font-size:12px; opacity: 0.8;">Referrals</span></div>
+                <div><strong>$2.500</strong><br><span style="font-size:12px; opacity: 0.8;">Earned</span></div>
             </div>
         </div>
         <div class="card-box">
             <p style="font-size: 14px; opacity: 0.6;">Your Referral Link</p>
             <div id="u-link" style="background:#0b1426; padding:12px; border-radius:10px; margin:10px 0; font-size:11px; color:#6366f1; word-break:break-all;">Loading...</div>
-            <button onclick="copyL()" style="width:100%; background:#6366f1; color:white; border:none; padding:15px; border-radius:12px; font-weight:bold;">Copy & Share</button>
+            <button onclick="copyL()" class="btn-blue">Copy Link</button>
         </div>
     </div>
 
@@ -107,7 +176,7 @@
             <p style="margin:15px 0 0 0; font-size:14px; opacity:0.8;">Points to Withdraw (Min 5000)</p>
             <input type="number" class="form-input" value="5000">
 
-            <button class="btn-green" onclick="tg.showAlert('Request Submitted!')">Withdraw Now</button>
+            <button class="btn-green" onclick="tg.showAlert('Withdrawal Request Submitted!')">Withdraw Now</button>
         </div>
         
         <div class="card-box">
@@ -128,6 +197,7 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        // ১. পেজ নেভিগেশন
         function nav(pId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -137,37 +207,48 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
+        // ২. ৬০টি টাস্ক সঠিকভাবে রেন্ডার করার ফাংশন
         function renderTasks() {
             const list = document.getElementById('task-list');
-            list.innerHTML = "";
+            list.innerHTML = ""; // আগেরগুলো ক্লিয়ার করবে
             for(let i=1; i<=60; i++) {
+                let sec = (i % 60).toString().padStart(2, '0');
                 list.innerHTML += `
                 <div class="item-row">
-                    <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="display:flex; align-items:center; gap:12px;">
                         <i class="material-icons" style="color:#94a3b8">list_alt</i>
-                        <div><div style="font-size:13px; font-weight:bold;">Task #${i}</div><div style="font-size:11px; color:#6366f1;">+50 Coins</div></div>
+                        <div>
+                            <div style="font-size:13px; font-weight:bold;">Visit site and complet task</div>
+                            <div style="font-size:11px; color:#6366f1;">+50 Coins</div>
+                        </div>
                     </div>
                     <div style="text-align:right;">
-                        <button style="background:#1e293b; color:#94a3b8; border:none; padding:8px 12px; border-radius:10px; font-size:11px;">Locked</button>
-                        <div style="font-size:9px; color:#ec4899; margin-top:3px;">06:00:${i+10}</div>
+                        <button style="background:#1e293b; color:#94a3b8; border:none; padding:8px 15px; border-radius:10px; font-size:11px; font-weight:bold;">Locked</button>
+                        <div style="font-size:9px; color:#ec4899; margin-top:4px;">06:00:${sec}</div>
                     </div>
                 </div>`;
             }
         }
 
+        // ৩. পেমেন্ট মেথড সিলেক্ট লজিক
         function sM(el) {
             document.querySelectorAll('.method-box').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
             tg.HapticFeedback.selectionChanged();
         }
 
-        // Referral Link
+        // ৪. ইউজার আইডি দিয়ে ডাইনামিক রেফার লিঙ্ক
         const uid = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "6026482193";
         const link = `https://t.me/Finova1_bot?startapp=${uid}`;
         document.getElementById('u-link').innerText = link;
-        function copyL() { navigator.clipboard.writeText(link); tg.showAlert("Copied!"); }
+        
+        function copyL() { 
+            navigator.clipboard.writeText(link); 
+            tg.showAlert("Referral Link Copied!"); 
+            tg.HapticFeedback.notificationOccurred('success');
+        }
 
-        // Chart
+        // ৫. ইনকাম চার্ট (7 Days)
         const ctx = document.getElementById('incomeChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
@@ -180,4 +261,4 @@
     </script>
 </body>
 </html>
-
+    
