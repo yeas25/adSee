@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSee Dashboard</title>
+    <title>AdSee Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -18,107 +18,69 @@
             padding-bottom: 100px;
         }
 
-        /* Profile Section Update: Photo on the Left */
-        .profile-section {
+        /* Top Header: Menu Button on Left */
+        .top-header {
             display: flex;
-            align-items: center; /* Nam ebong photo ke ek-i line-e rakhbe */
-            gap: 12px; /* Photo ebong namer majhe faka jayga */
+            align-items: center;
+            gap: 15px;
             margin-bottom: 25px;
         }
-        .profile-icon {
-            background: #6366f1;
-            padding: 8px;
-            border-radius: 50%;
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0;
             display: flex;
-            justify-content: center;
             align-items: center;
         }
-        .profile-icon i {
-            font-size: 28px; /* Icon size ektu boro kora hoyeche */
-        }
-        .user-info h2 {
-            margin: 0;
-            font-size: 22px;
-        }
-        .user-info p {
-            margin: 2px 0 0 0;
-            opacity: 0.6;
-            font-size: 13px;
-        }
+        .user-info h2 { margin: 0; font-size: 20px; }
+        .user-info p { margin: 0; opacity: 0.6; font-size: 12px; }
 
         /* Balance Card */
         .balance-card {
             background: linear-gradient(135deg, #4f46e5, #9333ea);
             padding: 25px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             margin-bottom: 15px;
         }
-        .balance-amount { font-size: 38px; font-weight: bold; margin: 10px 0; }
+        .balance-amount { font-size: 36px; font-weight: bold; margin: 10px 0; }
         .stats-row {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 15px;
             border-top: 1px solid rgba(255,255,255,0.2);
             padding-top: 15px;
         }
         .stat-item { text-align: center; }
-        .stat-item span { display: block; font-weight: bold; font-size: 16px; }
-        .stat-item label { font-size: 11px; opacity: 0.7; }
+        .stat-item span { display: block; font-weight: bold; }
+        .stat-item label { font-size: 10px; opacity: 0.7; }
 
+        /* Buttons */
         .btn-reset {
-            background: #1e293b;
-            color: #94a3b8;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
+            background: #1e293b; color: #94a3b8; border: none; width: 100%;
+            padding: 12px; border-radius: 12px; margin-bottom: 15px;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
         }
         .btn-watch {
-            background: #f59e0b;
-            color: black;
-            border: none;
-            width: 100%;
-            padding: 18px;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
+            background: #f59e0b; color: black; border: none; width: 100%;
+            padding: 16px; border-radius: 12px; font-size: 18px; font-weight: bold;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
         }
 
-        .chart-card {
-            background: #161f33;
-            padding: 20px;
-            border-radius: 25px;
-            margin-top: 25px;
-        }
+        /* Chart */
+        .chart-card { background: #161f33; padding: 20px; border-radius: 20px; margin-top: 20px; }
 
-        /* Bottom Nav */
+        /* Bottom Navigation */
         .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #111827;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid #1f2937;
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #111827; display: flex; justify-content: space-around;
+            padding: 12px 0; border-top: 1px solid #1f2937;
         }
         .nav-item {
-            text-align: center;
-            color: #4b5563;
-            text-decoration: none;
-            font-size: 11px;
+            text-align: center; color: #4b5563; text-decoration: none; font-size: 11px;
+            flex: 1; transition: 0.3s;
         }
         .nav-item.active { color: #6366f1; }
         .nav-item i { display: block; font-size: 24px; margin-bottom: 3px; }
@@ -126,10 +88,10 @@
 </head>
 <body>
 
-    <div class="profile-section">
-        <div class="profile-icon">
-            <i class="material-icons">person</i>
-        </div>
+    <div class="top-header">
+        <button class="menu-btn" onclick="tg.showAlert('মেনু অপশন শীঘ্রই আসছে!')">
+            <i class="material-icons">menu</i>
+        </button>
         <div class="user-info">
             <h2 id="user-name">Yeachin!</h2>
             <p>Let's earn some money today!</p>
@@ -137,7 +99,7 @@
     </div>
 
     <div class="balance-card">
-        <label style="font-size: 13px; opacity: 0.8;">Total Balance</label>
+        <label style="font-size: 12px; opacity: 0.8;">Total Balance</label>
         <div class="balance-amount">$36.790</div>
         <div class="stats-row">
             <div class="stat-item"><span>$0.000</span><label>Withdrawn</label></div>
@@ -146,7 +108,7 @@
         </div>
     </div>
 
-    <button class="btn-reset">
+    <button class="btn-reset" onclick="tg.showAlert('রিসেট টাইম এখনো শেষ হয়নি।')">
         <i class="material-icons" style="font-size: 18px;">history_toggle_off</i> Reset in: 14:29:41
     </button>
 
@@ -155,29 +117,61 @@
     </button>
 
     <div class="chart-card">
-        <p style="margin-top:0; font-weight: bold; font-size: 14px;">Income Stats (7D)</p>
-        <canvas id="incomeChart" height="150"></canvas>
+        <p style="margin:0 0 10px 0; font-weight: bold; font-size: 14px;">Income Stats (7D)</p>
+        <canvas id="incomeChart" height="140"></canvas>
     </div>
 
     <nav class="nav-bar">
-        <a href="#" class="nav-item active"><i class="material-icons">home</i>Home</a>
-        <a href="#" class="nav-item"><i class="material-icons">task</i>Tasks</a>
-        <a href="#" class="nav-item"><i class="material-icons">people</i>Refer</a>
-        <a href="#" class="nav-item"><i class="material-icons">account_balance_wallet</i>Wallet</a>
-        <a href="#" class="nav-item"><i class="material-icons">person_outline</i>Profile</a>
+        <a href="javascript:void(0)" class="nav-item active" onclick="setActive(this, 'Home')">
+            <i class="material-icons">home</i>Home
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="setActive(this, 'Tasks')">
+            <i class="material-icons">task</i>Tasks
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="setActive(this, 'Refer')">
+            <i class="material-icons">people</i>Refer
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="setActive(this, 'Wallet')">
+            <i class="material-icons">account_balance_wallet</i>Wallet
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="setActive(this, 'Profile')">
+            <i class="material-icons">person_outline</i>Profile
+        </a>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Telegram theke real name neyar jonyo
+        // ইউজার নেম সেট করা
         const user = tg.initDataUnsafe?.user;
         if (user) {
             document.getElementById('user-name').innerText = user.first_name + "!";
         }
 
-        // Chart Configuration
+        // নেভিগেশন বাটন ক্লিক করার ফাংশন
+        function setActive(element, pageName) {
+            // আগের একটিভ ক্লাস সরানো
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            // নতুন একটিভ ক্লাস যোগ করা
+            element.classList.add('active');
+            
+            // হ্যাপটিক ফিডব্যাক এবং মেসেজ
+            tg.HapticFeedback.selectionChanged();
+            console.log("Navigated to: " + pageName);
+            // এখানে আপনি চাইলে পেজ পরিবর্তনের লজিক দিতে পারেন
+        }
+
+        function startAd() {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.showConfirm("আপনি কি বিজ্ঞাপনটি দেখতে চান?", (isConfirmed) => {
+                if(isConfirmed) tg.showAlert("বিজ্ঞাপনটি লোড হচ্ছে...");
+            });
+        }
+
+        // Chart.js Configuration
         const ctx = document.getElementById('incomeChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
@@ -186,7 +180,7 @@
                 datasets: [{
                     data: [0.0, 1.15, 1.15, 1.20, 1.20, 2.11, 1.05],
                     backgroundColor: '#6366f1',
-                    borderRadius: 8,
+                    borderRadius: 6,
                 }]
             },
             options: {
@@ -197,11 +191,7 @@
                 }
             }
         });
-
-        function startAd() {
-            tg.HapticFeedback.impactOccurred('light');
-            tg.showAlert("Ad loading system start kora hocche...");
-        }
     </script>
 </body>
 </html>
+
