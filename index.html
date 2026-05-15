@@ -9,95 +9,120 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        body { background-color: #0b1426; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; padding-bottom: 100px; }
-        .top-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-        .menu-btn { background: none; border: none; color: white; cursor: pointer; }
-        .balance-card { background: linear-gradient(135deg, #4f46e5, #9333ea); padding: 25px; border-radius: 25px; margin-bottom: 15px; }
-        .balance-amount { font-size: 36px; font-weight: bold; margin: 10px 0; }
-        .btn-watch { background: #f59e0b; color: black; border: none; width: 100%; padding: 16px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        body { background-color: #0b1426; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; padding-bottom: 100px; overflow-x: hidden; }
         
+        /* Top Header */
+        .top-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
+        .menu-btn-top { background: none; border: none; color: white; cursor: pointer; padding: 5px; }
+
+        /* Balance Card */
+        .balance-card { background: linear-gradient(135deg, #4f46e5, #9333ea); padding: 25px; border-radius: 25px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .balance-amount { font-size: 36px; font-weight: bold; margin: 5px 0; }
+        
+        /* Main Action Button */
+        .btn-watch { background: #f59e0b; color: black; border: none; width: 100%; padding: 18px; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; transition: 0.2s; }
+        .btn-watch:active { transform: scale(0.98); }
+
         /* Navigation Bar */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1f2937; z-index: 1000; }
-        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 11px; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1f2937; z-index: 999; }
+        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 11px; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
         .nav-item.active { color: #6366f1; }
-        .nav-item i { display: block; font-size: 24px; margin-bottom: 3px; }
+        .nav-item i { font-size: 24px; margin-bottom: 4px; }
+
+        /* Chart */
+        .chart-card { background: #161f33; padding: 20px; border-radius: 20px; }
     </style>
 </head>
 <body>
 
     <div class="top-header">
-        <button id="topMenuIcon" class="menu-btn"><i class="material-icons">menu</i></button>
+        <button class="menu-btn-top" onclick="tg.showAlert('Top Menu Clicked')">
+            <i class="material-icons">menu</i>
+        </button>
         <div class="user-info">
-            <h2 id="userNameDisplay">Yeachin!</h2>
-            <p>Let's earn some money today!</p>
+            <h2 id="display-name" style="margin:0; font-size: 22px;">Yeachin!</h2>
+            <p style="margin:0; opacity: 0.6; font-size: 13px;">Let's earn some money today!</p>
         </div>
     </div>
 
     <div class="balance-card">
-        <label style="font-size: 12px; opacity: 0.8;">Total Balance</label>
+        <span style="font-size: 12px; opacity: 0.8;">Total Balance</span>
         <div class="balance-amount">$36.790</div>
     </div>
 
-    <button id="watchAdBtn" class="btn-watch">
+    <button class="btn-watch" id="watchBtn">
         <i class="material-icons">bolt</i> Watch Pop Up Ad
     </button>
 
-    <div style="background: #161f33; padding: 20px; border-radius: 20px; margin-top: 20px;">
-        <canvas id="incomeChart" height="140"></canvas>
+    <div class="chart-card">
+        <canvas id="incomeChart" height="150"></canvas>
     </div>
 
     <nav class="nav-bar">
-        <div class="nav-item active" id="navHome"><i class="material-icons">home</i>Home</div>
-        <div class="nav-item" id="navTasks"><i class="material-icons">task</i>Tasks</div>
-        <div class="nav-item" id="navRefer"><i class="material-icons">people</i>Refer</div>
-        <div class="nav-item" id="navWallet"><i class="material-icons">account_balance_wallet</i>Wallet</div>
-        <div class="nav-item" id="navMenu"><i class="material-icons">menu</i>Menu</div>
+        <div class="nav-item active" onclick="changeTab(this, 'Home')">
+            <i class="material-icons">home</i>Home
+        </div>
+        <div class="nav-item" onclick="changeTab(this, 'Tasks')">
+            <i class="material-icons">task</i>Tasks
+        </div>
+        <div class="nav-item" onclick="changeTab(this, 'Refer')">
+            <i class="material-icons">people</i>Refer
+        </div>
+        <div class="nav-item" onclick="changeTab(this, 'Wallet')">
+            <i class="material-icons">account_balance_wallet</i>Wallet
+        </div>
+        <div class="nav-item" onclick="changeTab(this, 'Menu')">
+            <i class="material-icons">menu</i>Menu
+        </div>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Button click function factory
-        function handleNavClick(id, name) {
-            const el = document.getElementById(id);
-            el.addEventListener('click', () => {
-                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-                el.classList.add('active');
-                tg.HapticFeedback.selectionChanged();
-                if(name === 'Menu') {
-                    tg.showAlert("Main Menu options loading...");
-                }
+        // ১. বাটন ক্লিক ও ট্যাব পরিবর্তনের ফাংশন
+        function changeTab(element, tabName) {
+            // সব আইটেম থেকে active ক্লাস সরানো
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
             });
+            // ক্লিক করা আইটেমে active ক্লাস যোগ করা
+            element.classList.add('active');
+            
+            // ভাইব্রেশন ও মেসেজ
+            tg.HapticFeedback.selectionChanged();
+            if(tabName === 'Menu') {
+                tg.showAlert("আপনি মেনু বাটনে ক্লিক করেছেন।");
+            }
         }
 
-        // Initialize Nav Buttons
-        handleNavClick('navHome', 'Home');
-        handleNavClick('navTasks', 'Tasks');
-        handleNavClick('navRefer', 'Refer');
-        handleNavClick('navWallet', 'Wallet');
-        handleNavClick('navMenu', 'Menu');
-
-        // Watch Ad Button
-        document.getElementById('watchAdBtn').addEventListener('click', () => {
+        // ২. ওয়াচ অ্যাড বাটন
+        document.getElementById('watchBtn').onclick = function() {
             tg.HapticFeedback.impactOccurred('medium');
-            tg.showConfirm("Watch ad to earn?", (ok) => {
-                if(ok) tg.showAlert("Loading Ad...");
+            tg.showConfirm("আপনি কি অ্যাড দেখে ইনকাম করতে চান?", function(ok) {
+                if(ok) tg.showAlert("অ্যাড লোড হচ্ছে...");
             });
-        });
+        };
 
-        // Top Menu Icon
-        document.getElementById('topMenuIcon').onclick = () => tg.showAlert("Top Menu clicked");
-
-        // Chart
+        // ৩. চার্ট সেটআপ
         const ctx = document.getElementById('incomeChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                datasets: [{ data: [0, 1.15, 1.15, 1.2, 1.2, 2.11, 1.05], backgroundColor: '#6366f1', borderRadius: 6 }]
+                datasets: [{
+                    data: [0, 1.15, 1.15, 1.20, 1.20, 2.11, 1.05],
+                    backgroundColor: '#6366f1',
+                    borderRadius: 6
+                }]
             },
-            options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { display: false },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                }
+            }
         });
     </script>
 </body>
