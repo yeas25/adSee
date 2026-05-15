@@ -9,15 +9,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        /* আপনার বর্তমান ডিজাইনের CSS এখানে থাকবে (আগের কোড থেকে নিতে পারেন) */
         body { background-color: #0b1426; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; padding-bottom: 100px; }
         .top-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
         .menu-btn { background: none; border: none; color: white; cursor: pointer; }
         .balance-card { background: linear-gradient(135deg, #4f46e5, #9333ea); padding: 25px; border-radius: 25px; margin-bottom: 15px; }
         .balance-amount { font-size: 36px; font-weight: bold; margin: 10px 0; }
         .btn-watch { background: #f59e0b; color: black; border: none; width: 100%; padding: 16px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1f2937; }
-        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 11px; flex: 1; cursor: pointer; }
+        
+        /* Navigation Bar */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1f2937; z-index: 1000; }
+        .nav-item { text-align: center; color: #4b5563; text-decoration: none; font-size: 11px; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
         .nav-item.active { color: #6366f1; }
         .nav-item i { display: block; font-size: 24px; margin-bottom: 3px; }
     </style>
@@ -25,7 +26,7 @@
 <body>
 
     <div class="top-header">
-        <button id="menuButton" class="menu-btn"><i class="material-icons">menu</i></button>
+        <button id="topMenuIcon" class="menu-btn"><i class="material-icons">menu</i></button>
         <div class="user-info">
             <h2 id="userNameDisplay">Yeachin!</h2>
             <p>Let's earn some money today!</p>
@@ -46,43 +47,49 @@
     </div>
 
     <nav class="nav-bar">
-        <div class="nav-item active" data-name="Home"><i class="material-icons">home</i>Home</div>
-        <div class="nav-item" data-name="Tasks"><i class="material-icons">task</i>Tasks</div>
-        <div class="nav-item" data-name="Refer"><i class="material-icons">people</i>Refer</div>
-        <div class="nav-item" data-name="Wallet"><i class="material-icons">account_balance_wallet</i>Wallet</div>
-        <div class="nav-item" data-name="Profile"><i class="material-icons">person_outline</i>Profile</div>
+        <div class="nav-item active" id="navHome"><i class="material-icons">home</i>Home</div>
+        <div class="nav-item" id="navTasks"><i class="material-icons">task</i>Tasks</div>
+        <div class="nav-item" id="navRefer"><i class="material-icons">people</i>Refer</div>
+        <div class="nav-item" id="navWallet"><i class="material-icons">account_balance_wallet</i>Wallet</div>
+        <div class="nav-item" id="navMenu"><i class="material-icons">menu</i>Menu</div>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // ১. মেনু বাটন ক্লিক লজিক
-        document.getElementById('menuButton').addEventListener('click', () => {
-            tg.HapticFeedback.impactOccurred('light');
-            tg.showAlert("মেনু ক্লিক হয়েছে!");
-        });
+        // Button click function factory
+        function handleNavClick(id, name) {
+            const el = document.getElementById(id);
+            el.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                el.classList.add('active');
+                tg.HapticFeedback.selectionChanged();
+                if(name === 'Menu') {
+                    tg.showAlert("Main Menu options loading...");
+                }
+            });
+        }
 
-        // ২. ওয়াচ অ্যাড বাটন ক্লিক লজিক
+        // Initialize Nav Buttons
+        handleNavClick('navHome', 'Home');
+        handleNavClick('navTasks', 'Tasks');
+        handleNavClick('navRefer', 'Refer');
+        handleNavClick('navWallet', 'Wallet');
+        handleNavClick('navMenu', 'Menu');
+
+        // Watch Ad Button
         document.getElementById('watchAdBtn').addEventListener('click', () => {
             tg.HapticFeedback.impactOccurred('medium');
-            tg.showConfirm("আপনি কি বিজ্ঞাপনটি দেখতে চান?", (confirmed) => {
-                if (confirmed) tg.showAlert("বিজ্ঞাপন লোড হচ্ছে...");
+            tg.showConfirm("Watch ad to earn?", (ok) => {
+                if(ok) tg.showAlert("Loading Ad...");
             });
         });
 
-        // ৩. নেভিগেশন বাটন ক্লিক লজিক
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.addEventListener('click', function() {
-                navItems.forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                tg.HapticFeedback.selectionChanged();
-                console.log("Selected: " + this.getAttribute('data-name'));
-            });
-        });
+        // Top Menu Icon
+        document.getElementById('topMenuIcon').onclick = () => tg.showAlert("Top Menu clicked");
 
-        // চার্ট কোড (আগের মতোই থাকবে)
+        // Chart
         const ctx = document.getElementById('incomeChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
