@@ -34,7 +34,22 @@
 
         /* Common Box Style */
         .card-box { background: #161f33; padding: 20px; border-radius: 20px; border: 1px solid #1f2937; margin-bottom: 15px; }
-        .item-row { background: #161f33; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1f2937; margin-bottom: 10px; }
+        
+        /* Task Page Styles matching 1000058463.jpg */
+        .task-header-box { background: rgba(99, 102, 241, 0.05); padding: 15px; border-radius: 25px; text-align: center; border: 1px dashed #2e3b5e; margin-bottom: 20px; }
+        .task-header-box p { margin: 0; font-size: 13px; color: #7c8ba1; }
+        
+        .item-row { background: #141d30; padding: 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1f2937; margin-bottom: 12px; }
+        .task-left-section { display: flex; align-items: center; gap: 14px; }
+        
+        /* Web Icon matching the screenshot */
+        .web-icon-container { background: #111a2e; border: 1px solid #243454; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .web-icon-container i { color: #22d3ee; font-size: 26px; }
+        
+        .task-title { font-size: 15px; font-weight: bold; color: white; margin-bottom: 4px; }
+        .task-reward { font-size: 13px; color: #10b981; font-weight: 600; }
+        
+        .task-timer-btn { background: #222c3f; color: #94a3b8; border: none; padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; min-width: 85px; text-align: center; }
         
         /* Refer Card */
         .refer-card { background: linear-gradient(135deg, #10b981, #059669); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
@@ -112,55 +127,14 @@
                         <div class="status-success">Success</div>
                     </div>
                 </div>
-                <div class="withdraw-list-item">
-                    <div>
-                        <div style="font-size: 13px; font-weight: bold;">Binance Pay</div>
-                        <div style="font-size: 11px; opacity: 0.5;">5 hours ago</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 13px; font-weight: bold;">$5.00</div>
-                        <div class="status-success">Success</div>
-                    </div>
-                </div>
-                <div class="withdraw-list-item">
-                    <div>
-                        <div style="font-size: 13px; font-weight: bold;">USDT (TRC20)</div>
-                        <div style="font-size: 11px; opacity: 0.5;">Yesterday</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 13px; font-weight: bold;">$25.00</div>
-                        <div class="status-success">Success</div>
-                    </div>
-                </div>
-                <div class="withdraw-list-item">
-                    <div>
-                        <div style="font-size: 13px; font-weight: bold;">bKash (019******14)</div>
-                        <div style="font-size: 11px; opacity: 0.5;">1 day ago</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 13px; font-weight: bold;">$7.20</div>
-                        <div class="status-success">Success</div>
-                    </div>
-                </div>
-                <div class="withdraw-list-item">
-                    <div>
-                        <div style="font-size: 13px; font-weight: bold;">Litecoin Address</div>
-                        <div style="font-size: 11px; opacity: 0.5;">2 days ago</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 13px; font-weight: bold;">$12.00</div>
-                        <div class="status-success">Success</div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
     <div id="task" class="page">
-        <h2>Tasks</h2>
-        <div class="card-box" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
-            <h3 style="margin:0">Visit website and complet task</h3>
-            <p style="opacity:0.6; font-size:12px; margin-top: 5px;">Complete 60 daily tasks to earn rewards.</p>
+        <h2 style="margin-top: 0; margin-bottom: 15px;">Tasks</h2>
+        <div class="task-header-box">
+            <p>All tasks reset every 24 hours.</p>
         </div>
         <div id="task-list"></div>
     </div>
@@ -170,7 +144,7 @@
         <div class="refer-card">
             <p style="font-size: 16px; margin-bottom: 20px;">Invite friends and earn bonus for every join.</p>
             <div style="display: flex; gap: 30px;">
-                <div><strong>3</strong><br><span style="font-size:12px; opacity: 0.8;">Referrals</span></div>
+                <div><strong>5</strong><br><span style="font-size:12px; opacity: 0.8;">Referrals</span></div>
                 <div><strong>$2.500</strong><br><span style="font-size:12px; opacity: 0.8;">Earned</span></div>
             </div>
         </div>
@@ -202,16 +176,11 @@
 
             <button class="btn-green" onclick="tg.showAlert('Withdrawal Request Submitted!')">Withdraw Now</button>
         </div>
-        
-        <div class="card-box">
-            <p style="margin:0; font-weight:bold;">Transaction History</p>
-            <p style="font-size:12px; opacity:0.5; margin-top:10px;">No withdrawal history yet.</p>
-        </div>
     </div>
 
     <nav class="nav-bar">
         <div class="nav-item active" onclick="nav('home', this)"><i class="material-icons">home</i>Home</div>
-        <div class="nav-item" onclick="nav('task', this)"><i class="material-icons">task</i>Tasks</div>
+        <div class="nav-item" onclick="nav('task', this)"><i class="material-icons">list_alt</i>Tasks</div>
         <div class="nav-item" onclick="nav('refer', this)"><i class="material-icons">people</i>Refer</div>
         <div class="nav-item" onclick="nav('wallet', this)"><i class="material-icons">account_balance_wallet</i>Wallet</div>
         <div class="nav-item" onclick="nav('home', this)"><i class="material-icons">person</i>Profile</div>
@@ -221,38 +190,27 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // --- টেলিগ্রাম অটোমেটিক ইউজার ডাটা লজিক ---
         function initTelegramUser() {
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const user = tg.initDataUnsafe.user;
-                
-                // ১. নাম অটো লোড (First Name + Last Name)
                 const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
                 document.getElementById('display-name').innerText = fullName || "Telegram User";
 
-                // ২. অটোমেটিক প্রোফাইল পিকচার / অবতার জেনারেশন
                 const avatarElement = document.getElementById('user-avatar');
                 if (user.photo_url) {
-                    // যদি টেলিগ্রামের সিকিউর ইউআরএল পাওয়া যায় তবে ইমেজ দেখাবে
                     avatarElement.innerHTML = `<img src="${user.photo_url}" alt="Profile">`;
                 } else {
-                    // অন্যথায় নামের প্রথম অক্ষর দিয়ে প্রিমিয়াম স্টাইলিশ অবতার তৈরি হবে
                     const firstLetter = user.first_name ? user.first_name.charAt(0) : "U";
                     avatarElement.innerText = firstLetter;
-                    
-                    // একেক ইউজারের জন্য একেক কালার র্যান্ডম সেট হবে যাতে দেখতে সুন্দর লাগে
-                    const colors = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#3b82f6', '#8b5cf6'];
-                    const randomColor = colors[user.id % colors.length];
-                    avatarElement.style.backgroundColor = randomColor;
+                    const colors = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#3b82f6'];
+                    avatarElement.style.backgroundColor = colors[user.id % colors.length];
                 }
             } else {
-                // ব্রাউজারে টেস্ট করার জন্য ডিফল্ট ডাটা
                 document.getElementById('display-name').innerText = "Demo Yeachin";
                 document.getElementById('user-avatar').innerText = "D";
             }
         }
 
-        // অ্যাপ চালু হওয়ার সাথে সাথে কল হবে
         initTelegramUser();
 
         function nav(pId, el) {
@@ -264,23 +222,29 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
+        // 10টি Web Visit টাস্ক জেনারেট করার নতুন ফাংশন (রিওয়ার্ড $0.050)
         function renderTasks() {
             const list = document.getElementById('task-list');
             list.innerHTML = ""; 
-            for(let i=1; i<=60; i++) {
-                let sec = (i % 60).toString().padStart(2, '0');
+            
+            // ডেমো টাইমার বা কাউন্টার স্ট্রিং তৈরি (স্ক্রিনশটের মতো ২২:৪৩:৪৩ রেঞ্জে রাখার জন্য)
+            for(let i = 1; i <= 10; i++) {
+                let secondOffset = (40 + i) % 60;
+                let mockTimer = `22:43:${secondOffset.toString().padStart(2, '0')}`;
+                
                 list.innerHTML += `
                 <div class="item-row">
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <i class="material-icons" style="color:#94a3b8">list_alt</i>
+                    <div class="task-left-section">
+                        <div class="web-icon-container">
+                            <i class="material-icons">language</i>
+                        </div>
                         <div>
-                            <div style="font-size:13px; font-weight:bold;">Visit site and complet task</div>
-                            <div style="font-size:11px; color:#6366f1;">+50 Coins</div>
+                            <div class="task-title">Web Visit 30s</div>
+                            <div class="task-reward">Reward: $0.050</div>
                         </div>
                     </div>
-                    <div style="text-align:right;">
-                        <button style="background:#1e293b; color:#94a3b8; border:none; padding:8px 15px; border-radius:10px; font-size:11px; font-weight:bold;">Locked</button>
-                        <div style="font-size:9px; color:#ec4899; margin-top:4px;">06:00:${sec}</div>
+                    <div>
+                        <button class="task-timer-btn">${mockTimer}</button>
                     </div>
                 </div>`;
             }
