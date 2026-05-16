@@ -16,13 +16,13 @@
         /* Global Sticky Header Container */
         .global-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px 20px; background: #0b1426; position: sticky; top: 0; z-index: 100; }
         
-        /* Profile Section (Only visible on Home) */
+        /* Profile Section */
         .profile-section { display: flex; align-items: center; gap: 12px; transition: opacity 0.2s ease; }
         .profile-circle { background: #6366f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: white; text-transform: uppercase; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3); overflow: hidden; }
         .profile-circle img { width: 100%; height: 100%; object-fit: cover; }
         .user-name { font-size: 16px; font-weight: bold; color: white; }
         
-        /* Balance Container on the Right Side */
+        /* Balance Container */
         .header-balance { text-align: right; margin-left: auto; }
         .header-balance span { font-size: 11px; opacity: 0.6; display: block; }
         .header-balance strong { font-size: 22px; color: #6366f1; font-weight: bold; }
@@ -34,7 +34,7 @@
         .stat-small-box span { font-size: 11px; opacity: 0.6; }
         .card-box { background: #161f33; padding: 20px; border-radius: 20px; border: 1px solid #1f2937; margin-bottom: 15px; }
         
-        /* Task Styling Matching ScreenShots */
+        /* Task Styling Matching Screenshots */
         .task-header-box { background: rgba(99, 102, 241, 0.05); padding: 15px; border-radius: 25px; text-align: center; border: 1px dashed #2e3b5e; margin-bottom: 20px; }
         .task-header-box p { margin: 0; font-size: 13px; color: #7c8ba1; }
         .item-row { background: #141d30; padding: 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1f2937; margin-bottom: 12px; }
@@ -44,10 +44,13 @@
         .task-title { font-size: 15px; font-weight: bold; color: white; margin-bottom: 4px; }
         .task-reward { font-size: 13px; color: #10b981; font-weight: 600; }
         
-        /* Premium Purple/Blue Start Button */
-        .btn-start-task { background: #5b60f5; color: white; border: none; padding: 10px 22px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 12px rgba(91, 96, 245, 0.3); }
+        /* Premium Buttons & Countdown Boxes */
+        .btn-start-task { background: #5b60f5; color: white; border: none; padding: 10px 22px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 12px rgba(91, 96, 245, 0.3); min-width: 90px; text-align: center; }
         .btn-start-task:hover { background: #484cd1; }
         .btn-disabled { background: #222c3f !important; color: #64748b !important; box-shadow: none !important; cursor: not-allowed; }
+        
+        /* Screenshot-matched Countdown Lock Style */
+        .timer-lock-box { background: #374151; color: #e5e7eb; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: bold; min-width: 90px; text-align: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); letter-spacing: 0.5px; }
 
         /* Withdraw List Item Styling */
         .withdraw-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1f2937; }
@@ -79,7 +82,7 @@
         </div>
         <div class="header-balance">
             <span>Total Balance</span>
-            <strong id="global-balance-text">$00.000</strong>
+            <strong id="global-balance-text">$36.790</strong>
         </div>
     </div>
 
@@ -90,11 +93,11 @@
                 <span>Withdrawn</span>
             </div>
             <div class="stat-small-box">
-                <strong id="ads-watched-count">0</strong>
+                <strong id="ads-watched-count">621</strong>
                 <span>Ads Watched</span>
             </div>
             <div class="stat-small-box">
-                <strong>0</strong>
+                <strong>3</strong>
                 <span>Referrals</span>
             </div>
         </div>
@@ -193,12 +196,12 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Monetag ডিরেক্ট লিঙ্ক
         const MONETAG_DIRECT_LINK = "https://omg10.com/4/11005394";
 
         let currentBalance = 36.790;
         let adsWatchedCount = 621;
         let completedTasks = []; 
+        let runningTimers = {}; // অ্যাক্টিভ টাইমারগুলো ট্র্যাক করার অবজেক্ট
 
         function updateUIBalances() {
             document.getElementById('global-balance-text').innerText = `$${currentBalance.toFixed(3)}`;
@@ -247,6 +250,20 @@
             
             for(let i = 1; i <= 10; i++) {
                 const isDone = completedTasks.includes(i);
+                const isRunning = runningTimers[i] !== undefined;
+                
+                let buttonHTML = '';
+                if (isDone) {
+                    buttonHTML = `<button class="btn-start-task btn-disabled">Completed</button>`;
+                } else if (isRunning) {
+                    // স্ক্রিনশটের ডিজাইনের মতো কাউন্টডাউন টাইমার ফরম্যাট (যেমন: 00:00:25)
+                    let timeLeft = runningTimers[i];
+                    let displayTime = "00:00:" + (timeLeft < 10 ? "0" + timeLeft : timeLeft);
+                    buttonHTML = `<div class="timer-lock-box">${displayTime}</div>`;
+                } else {
+                    buttonHTML = `<button class="btn-start-task" onclick="triggerMonetagAd(${i})">Start</button>`;
+                }
+
                 list.innerHTML += `
                 <div class="item-row">
                     <div class="task-left-section">
@@ -255,42 +272,72 @@
                         </div>
                         <div>
                             <div class="task-title">Web Visit 30s</div>
-                            <div class="task-reward">Reward: $0.050</div>
+                            <div class="task-reward">Reward: $0.100</div>
                         </div>
                     </div>
-                    <div>
-                        <button class="btn-start-task ${isDone ? 'btn-disabled' : ''}" 
-                                onclick="${isDone ? '' : `triggerMonetagAd(${i})`}">
-                            ${isDone ? 'Completed' : 'Start'}
-                        </button>
+                    <div id="task-action-${i}">
+                        ${buttonHTML}
                     </div>
                 </div>`;
             }
         }
 
-        // টেলিগ্রামের ইন্টারনাল ব্রাউজার ব্যবহার করে লিঙ্ক ওপেন করার ফিক্সড ফাংশন
+        // নিখুঁত ৩০ সেকেন্ড ভ্যালিডেশন এবং কাউন্টডাউন মেকানিজম
         function triggerMonetagAd(taskId) {
             tg.HapticFeedback.notificationOccurred('warning');
             
-            // window.open এর বদলে Telegram ইন-앱 ব্রাউজার হ্যান্ডলার ব্যবহার করা হলো
-            if (tg.openLink) {
-                tg.openLink(MONETAG_DIRECT_LINK);
-            } else {
-                window.open(MONETAG_DIRECT_LINK, '_blank');
+            let adOpened = false;
+
+            // টেলিগ্রাম ইন্টারনাল শিটে অ্যাড ওপেন করার ট্রাই
+            try {
+                if (tg.openLink) {
+                    tg.openLink(MONETAG_DIRECT_LINK);
+                    adOpened = true;
+                } else {
+                    let win = window.open(MONETAG_DIRECT_LINK, '_blank');
+                    if (win) adOpened = true;
+                }
+            } catch (e) {
+                adOpened = false;
             }
 
-            // ব্যালেন্স ও টাস্ক কমপ্লিট করার সিকিউর ডিলে 
-            setTimeout(() => {
-                currentBalance += 0.050;
-                adsWatchedCount += 1;
-                completedTasks.push(taskId);
-                
-                renderTasks();
-                updateUIBalances();
-                
-                tg.showAlert("Success! $0.050 added to your balance.");
-                tg.HapticFeedback.notificationOccurred('success');
-            }, 1500);
+            // অ্যাড লোড বা ওপেন না হলে রিওয়ার্ড প্রসেস বন্ধ
+            if (!adOpened) {
+                tg.showAlert("Failed to load Ad! Please try again.");
+                return;
+            }
+
+            // টাইমার সেটআপ (৩০ সেকেন্ড বাধ্যতামূলক)
+            let duration = 30;
+            runningTimers[taskId] = duration;
+            renderTasks(); // বাটন পরিবর্তন করে টাইমার ভিউ দেখানোর জন্য রেন্ডার
+
+            let countdown = setInterval(() => {
+                duration--;
+                if (duration <= 0) {
+                    clearInterval(countdown);
+                    delete runningTimers[taskId]; // কাউন্টডাউন শেষ ট্র্যাকার রিমুভ
+                    
+                    // ৩০ সেকেন্ড সফলভাবে শেষ হলেই ব্যালেন্স যুক্ত হবে
+                    currentBalance += 0.100;
+                    adsWatchedCount += 1;
+                    completedTasks.push(taskId);
+                    
+                    renderTasks();
+                    updateUIBalances();
+                    
+                    tg.showAlert("Success! $0.100 added to your balance.");
+                    tg.HapticFeedback.notificationOccurred('success');
+                } else {
+                    runningTimers[taskId] = duration;
+                    // শুধুমাত্র নির্দিষ্ট বাটনের ভেতরের টেক্সট আপডেট (পারফরম্যান্স ফাস্ট রাখার জন্য)
+                    let container = document.getElementById(`task-action-${taskId}`);
+                    if (container) {
+                        let displayTime = "00:00:" + (duration < 10 ? "0" + duration : duration);
+                        container.innerHTML = `<div class="timer-lock-box">${displayTime}</div>`;
+                    }
+                }
+            }, 1000);
         }
 
         function sM(el) {
