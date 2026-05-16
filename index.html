@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSee$ Pro</title>
+    <title>AdSee$ Premium</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,11 +13,19 @@
         .active-page { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Dashboard & Cards */
-        .balance-card { background: linear-gradient(135deg, #4f46e5, #9333ea); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
-        .balance-amount { font-size: 38px; font-weight: bold; }
-        .stats-grid { display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; font-size: 12px; }
-        
+        /* Header Style */
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 5px 0; }
+        .profile-circle { background: #6366f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .header-balance { text-align: right; }
+        .header-balance span { font-size: 11px; opacity: 0.6; display: block; }
+        .header-balance strong { font-size: 22px; color: #6366f1; font-weight: bold; }
+
+        /* Stats Grid (Below Balance Card) */
+        .stats-row-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .stat-small-box { background: #161f33; padding: 15px 10px; border-radius: 18px; text-align: center; border: 1px solid #1f2937; }
+        .stat-small-box strong { font-size: 16px; font-weight: bold; display: block; margin-bottom: 4px; }
+        .stat-small-box span { font-size: 11px; opacity: 0.6; }
+
         /* Common Box Style */
         .card-box { background: #161f33; padding: 20px; border-radius: 20px; border: 1px solid #1f2937; margin-bottom: 15px; }
         .item-row { background: #161f33; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1f2937; margin-bottom: 10px; }
@@ -50,27 +58,39 @@
 <body>
 
     <div id="home" class="page active-page">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <div>
-                <h2 style="margin: 0;">Hello, Yeachin!</h2>
-                <p style="opacity:0.6; font-size:13px; margin: 5px 0 0 0;">Let's earn some money today!</p>
+        <div class="top-header">
+            <div class="profile-circle"><i class="material-icons">person</i></div>
+            <div class="header-balance">
+                <span>Total Balance</span>
+                <strong>$36.790</strong>
             </div>
-            <div style="background:#6366f1; width: 45px; height: 45px; border-radius:50%; display: flex; align-items: center; justify-content: center;"><i class="material-icons">person</i></div>
         </div>
         
-        <div class="balance-card">
-            <span style="font-size: 13px;">Total Balance</span>
-            <div class="balance-amount">$36.790</div>
-            <div class="stats-grid">
-                <div><strong>$0.000</strong><br>Withdrawn</div>
-                <div><strong>621</strong><br>Ads Watched</div>
-                <div><strong>3</strong><br>Referrals</div>
+        <div class="stats-row-grid">
+            <div class="stat-small-box">
+                <strong>$0.000</strong>
+                <span>Withdrawn</span>
+            </div>
+            <div class="stat-small-box">
+                <strong>621</strong>
+                <span>Ads Watched</span>
+            </div>
+            <div class="stat-small-box">
+                <strong>3</strong>
+                <span>Referrals</span>
             </div>
         </div>
 
         <div class="card-box">
+            <p style="margin:0 0 15px 0; font-weight:bold; display: flex; align-items: center; gap: 6px;">
+                <i class="material-icons" style="color: #6366f1; font-size: 18px;">bar_chart</i> Income Stats (7D)
+            </p>
+            <canvas id="incomeChart" height="145"></canvas>
+        </div>
+
+        <div class="card-box">
             <p style="margin: 0 0 15px 0; font-weight: bold; display: flex; align-items: center; gap: 8px;">
-                <i class="material-icons" style="color: #10b981;">history</i> Last 5 Withdraw List
+                <i class="material-icons" style="color: #10b981; font-size: 18px;">history</i> Withdraw History
             </p>
             <div id="last-withdrawals">
                 <div class="withdraw-list-item">
@@ -124,11 +144,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="card-box">
-            <p style="margin:0 0 15px 0; font-weight:bold;">Income Stats (7D)</p>
-            <canvas id="incomeChart" height="150"></canvas>
         </div>
     </div>
 
@@ -197,7 +212,6 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // ১. পেজ নেভিগেশন
         function nav(pId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -207,10 +221,9 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        // ২. ৬০টি টাস্ক সঠিকভাবে রেন্ডার করার ফাংশন
         function renderTasks() {
             const list = document.getElementById('task-list');
-            list.innerHTML = ""; // আগেরগুলো ক্লিয়ার করবে
+            list.innerHTML = ""; 
             for(let i=1; i<=60; i++) {
                 let sec = (i % 60).toString().padStart(2, '0');
                 list.innerHTML += `
@@ -230,14 +243,12 @@
             }
         }
 
-        // ৩. পেমেন্ট মেথড সিলেক্ট লজিক
         function sM(el) {
             document.querySelectorAll('.method-box').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
             tg.HapticFeedback.selectionChanged();
         }
 
-        // ৪. ইউজার আইডি দিয়ে ডাইনামিক রেফার লিঙ্ক
         const uid = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "6026482193";
         const link = `https://t.me/Finova1_bot?startapp=${uid}`;
         document.getElementById('u-link').innerText = link;
@@ -248,7 +259,7 @@
             tg.HapticFeedback.notificationOccurred('success');
         }
 
-        // ৫. ইনকাম চার্ট (7 Days)
+        // 7D Chart Setup
         const ctx = document.getElementById('incomeChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
@@ -261,4 +272,4 @@
     </script>
 </body>
 </html>
-    
+
