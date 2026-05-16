@@ -185,7 +185,7 @@
         <div class="nav-item active" onclick="nav('home', this)"><i class="material-icons">home</i>Home</div>
         <div class="nav-item" onclick="nav('task', this)"><i class="material-icons">list_alt</i>Tasks</div>
         <div class="nav-item" onclick="nav('refer', this)"><i class="material-icons">people</i>Refer</div>
-        <div class="nav-item" onclick="nav('wallet', this)."><i class="material-icons">account_balance_wallet</i>Wallet</div>
+        <div class="nav-item" onclick="nav('wallet', this)"><i class="material-icons">account_balance_wallet</i>Wallet</div>
         <div class="nav-item" onclick="nav('home', this)"><i class="material-icons">person</i>Profile</div>
     </nav>
 
@@ -193,7 +193,7 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // আপনার প্রোভাইড করা লাইভ Monetag ডিরেক্ট লিঙ্ক সেট করা হলো
+        // Monetag ডিরেক্ট লিঙ্ক
         const MONETAG_DIRECT_LINK = "https://omg10.com/4/11005394";
 
         let currentBalance = 36.790;
@@ -268,14 +268,18 @@
             }
         }
 
-        // Monetag Ad ওপেন এবং ব্যালেন্স ইন্টিগ্রেশন
+        // টেলিগ্রামের ইন্টারনাল ব্রাউজার ব্যবহার করে লিঙ্ক ওপেন করার ফিক্সড ফাংশন
         function triggerMonetagAd(taskId) {
             tg.HapticFeedback.notificationOccurred('warning');
             
-            // Monetag ডিরেক্ট লিঙ্ক পপআপ হিসেবে ওপেন হবে 
-            window.open(MONETAG_DIRECT_LINK, '_blank');
+            // window.open এর বদলে Telegram ইন-앱 ব্রাউজার হ্যান্ডলার ব্যবহার করা হলো
+            if (tg.openLink) {
+                tg.openLink(MONETAG_DIRECT_LINK);
+            } else {
+                window.open(MONETAG_DIRECT_LINK, '_blank');
+            }
 
-            // ১.৫ সেকেন্ড ডিলে দিয়ে টাস্ক কমপ্লিট ও ব্যালেন্স ক্রেডিট সিকিউর করা হচ্ছে
+            // ব্যালেন্স ও টাস্ক কমপ্লিট করার সিকিউর ডিলে 
             setTimeout(() => {
                 currentBalance += 0.050;
                 adsWatchedCount += 1;
@@ -315,4 +319,3 @@
     </script>
 </body>
 </html>
-
