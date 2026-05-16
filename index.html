@@ -9,20 +9,23 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { background-color: #0b1426; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
-        .page { display: none; padding: 0 20px; padding-bottom: 120px; animation: fadeIn 0.3s ease; }
+        .page { display: none; padding: 20px; padding-bottom: 120px; animation: fadeIn 0.3s ease; }
         .active-page { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Fixed Top Balance Card (No Username) */
-        .fixed-balance-container { padding: 20px 20px 10px 20px; position: sticky; top: 0; background: #0b1426; z-index: 100; }
-        .balance-card { background: linear-gradient(135deg, #6366f1, #a855f7); padding: 20px; border-radius: 24px; text-align: left; box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25); }
-        .balance-card span { font-size: 13px; opacity: 0.8; display: block; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .balance-card strong { font-size: 32px; font-weight: bold; color: white; letter-spacing: 1px; }
-
-        /* Main Content Layout Details */
-        .welcome-text-area { padding: 10px 0 15px 0; }
-        .welcome-text-area h2 { margin: 0; font-size: 26px; font-weight: bold; }
-        .welcome-text-area p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.6; }
+        /* Global Sticky Header Container */
+        .global-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px 20px; background: #0b1426; position: sticky; top: 0; z-index: 100; }
+        
+        /* Profile Section (Only visible on Home) */
+        .profile-section { display: flex; align-items: center; gap: 12px; transition: opacity 0.2s ease; }
+        .profile-circle { background: #6366f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: white; text-transform: uppercase; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3); overflow: hidden; }
+        .profile-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .user-name { font-size: 16px; font-weight: bold; color: white; }
+        
+        /* Balance Container on the Right Side */
+        .header-balance { text-align: right; margin-left: auto; }
+        .header-balance span { font-size: 11px; opacity: 0.6; display: block; }
+        .header-balance strong { font-size: 22px; color: #6366f1; font-weight: bold; }
 
         /* Stats Grid & Common Boxes */
         .stats-row-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -32,7 +35,7 @@
         .card-box { background: #161f33; padding: 20px; border-radius: 20px; border: 1px solid #1f2937; margin-bottom: 15px; }
         
         /* Task Styling Matching ScreenShots */
-        .task-header-box { background: rgba(99, 102, 241, 0.05); padding: 15px; border-radius: 25px; text-align: center; border: 1px dashed #2e3b5e; margin-bottom: 20px; margin-top: 10px; }
+        .task-header-box { background: rgba(99, 102, 241, 0.05); padding: 15px; border-radius: 25px; text-align: center; border: 1px dashed #2e3b5e; margin-bottom: 20px; }
         .task-header-box p { margin: 0; font-size: 13px; color: #7c8ba1; }
         .item-row { background: #141d30; padding: 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1f2937; margin-bottom: 12px; }
         .task-left-section { display: flex; align-items: center; gap: 14px; }
@@ -54,12 +57,12 @@
         @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
         .ad-timer-count { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; color: #22d3ee; }
 
-        /* Refer, Wallet & Form Controls */
-        .refer-card { background: linear-gradient(135deg, #10b981, #059669); padding: 25px; border-radius: 25px; margin-bottom: 20px; margin-top: 10px; }
+        /* Refer & Withdraw Styles */
+        .refer-card { background: linear-gradient(135deg, #10b981, #059669); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
         .form-input { width: 100%; padding: 15px; background: #0b1426; border: 1px solid #1f2937; border-radius: 12px; color: white; margin-top: 10px; box-sizing: border-box; }
         .btn-green { width: 100%; padding: 18px; background: #16a34a; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; }
         .btn-blue { width: 100%; background: #6366f1; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-        .method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
+        .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
         .method-box { background: #0b1426; padding: 12px; border-radius: 12px; text-align: center; font-size: 11px; border: 1px solid #1f2937; cursor: pointer; }
         .method-box.selected { border-color: #6366f1; background: rgba(99,102,241,0.1); }
         
@@ -72,19 +75,18 @@
 </head>
 <body>
 
-    <div class="fixed-balance-container">
-        <div class="balance-card">
+    <div class="global-header">
+        <div class="profile-section" id="header-profile-block">
+            <div class="profile-circle" id="user-avatar">Y</div>
+            <div class="user-name" id="display-name">Guest User</div>
+        </div>
+        <div class="header-balance">
             <span>Total Balance</span>
             <strong id="global-balance-text">$36.790</strong>
         </div>
     </div>
 
     <div id="home" class="page active-page">
-        <div class="welcome-text-area">
-            <h2 id="welcome-username">Hello!</h2>
-            <p>Let's earn some money today!</p>
-        </div>
-
         <div class="stats-row-grid">
             <div class="stat-small-box">
                 <strong>$0.000</strong>
@@ -120,10 +122,11 @@
     </div>
 
     <div id="refer" class="page">
+        <h2>Refer</h2>
         <div class="refer-card">
             <p style="font-size: 16px; margin-bottom: 20px;">Invite friends and earn bonus for every join.</p>
             <div style="display: flex; gap: 30px;">
-                <div><strong>5</strong><br><span style="font-size:12px; opacity: 0.8;">Referrals</span></div>
+                <div><strong>3</strong><br><span style="font-size:12px; opacity: 0.8;">Referrals</span></div>
                 <div><strong>$2.500</strong><br><span style="font-size:12px; opacity: 0.8;">Earned</span></div>
             </div>
         </div>
@@ -135,7 +138,7 @@
     </div>
 
     <div id="wallet" class="page">
-        <h3 style="margin-top: 15px; margin-bottom: 10px;">Withdrawal</h3>
+        <h2>Withdrawal</h2>
         <div class="card-box">
             <p style="margin:0; font-size:14px; opacity:0.8;">Select Payment Method</p>
             <div class="method-grid">
@@ -143,10 +146,17 @@
                 <div class="method-box" onclick="sM(this)">Binance</div>
                 <div class="method-box" onclick="sM(this)">USDT</div>
                 <div class="method-box" onclick="sM(this)">Litecoin</div>
+                <div class="method-box" onclick="sM(this)">Webmoney</div>
+                <div class="method-box" onclick="sM(this)">M-PESA</div>
             </div>
-            <input type="text" class="form-input" placeholder="Enter wallet address">
+            
+            <p style="margin:15px 0 0 0; font-size:14px; opacity:0.8;">Account Details</p>
+            <input type="text" class="form-input" placeholder="Enter number or wallet address">
+            
+            <p style="margin:15px 0 0 0; font-size:14px; opacity:0.8;">Points to Withdraw (Min 5000)</p>
             <input type="number" class="form-input" value="5000">
-            <button class="btn-green" onclick="tg.showAlert('Withdrawal Submitted!')">Withdraw Now</button>
+
+            <button class="btn-green" onclick="tg.showAlert('Withdrawal Request Submitted!')">Withdraw Now</button>
         </div>
     </div>
 
@@ -176,7 +186,6 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // রিয়েল-টাইম ডাটা ট্র্যাকিং স্টেট
         let currentBalance = 36.790;
         let adsWatchedCount = 621;
         let completedTasks = []; 
@@ -189,20 +198,37 @@
         function initTelegramUser() {
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const user = tg.initDataUnsafe.user;
-                document.getElementById('welcome-username').innerText = `${user.first_name || 'User'}!`;
+                document.getElementById('display-name').innerText = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+                const avatarElement = document.getElementById('user-avatar');
+                if (user.photo_url) {
+                    avatarElement.innerHTML = `<img src="${user.photo_url}" alt="Profile">`;
+                } else {
+                    avatarElement.innerText = user.first_name ? user.first_name.charAt(0) : "U";
+                }
             } else {
-                document.getElementById('welcome-username').innerText = "Yeachin!";
+                document.getElementById('display-name').innerText = "Demo Yeachin";
             }
             updateUIBalances();
         }
 
         initTelegramUser();
 
+        // ডাইনামিক পেজ নেভিগেশন এবং প্রোফাইল শো/হাইড লজিক
         function nav(pId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            
             document.getElementById(pId).classList.add('active-page');
             el.classList.add('active');
+
+            // শর্ত: শুধুমাত্র হোম পেজে প্রোফাইল ব্লকটি দৃশ্যমান থাকবে
+            const profileBlock = document.getElementById('header-profile-block');
+            if (pId === 'home') {
+                profileBlock.style.display = 'flex';
+            } else {
+                profileBlock.style.display = 'none';
+            }
+
             if(pId === 'task') renderTasks();
             tg.HapticFeedback.impactOccurred('light');
         }
@@ -293,4 +319,3 @@
     </script>
 </body>
 </html>
-
