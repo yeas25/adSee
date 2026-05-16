@@ -13,90 +13,82 @@
         .active-page { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Header Style */
-        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 5px 0; }
+        /* Global Header Style (Will show on all pages now) */
+        .global-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 5px 20px; background: #0b1426; position: sticky; top: 0; z-index: 100; }
         .profile-section { display: flex; align-items: center; gap: 12px; }
-        
-        /* Dynamic Profile Picture From Telegram */
         .profile-circle { background: #6366f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: white; text-transform: uppercase; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3); overflow: hidden; }
         .profile-circle img { width: 100%; height: 100%; object-fit: cover; }
-        
         .user-name { font-size: 16px; font-weight: bold; color: white; }
         .header-balance { text-align: right; }
         .header-balance span { font-size: 11px; opacity: 0.6; display: block; }
         .header-balance strong { font-size: 22px; color: #6366f1; font-weight: bold; }
 
-        /* Stats Grid */
-        .stats-row-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        /* Stats Grid & Common Boxes */
+        .stats-row-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; padding: 0 20px; }
         .stat-small-box { background: #161f33; padding: 15px 10px; border-radius: 18px; text-align: center; border: 1px solid #1f2937; }
         .stat-small-box strong { font-size: 16px; font-weight: bold; display: block; margin-bottom: 4px; }
         .stat-small-box span { font-size: 11px; opacity: 0.6; }
-
-        /* Common Box Style */
         .card-box { background: #161f33; padding: 20px; border-radius: 20px; border: 1px solid #1f2937; margin-bottom: 15px; }
         
-        /* Task Page Styles matching 1000058463.jpg */
+        /* Task Styling Matching ScreenShots */
+        .task-container-padding { padding: 0 20px; }
         .task-header-box { background: rgba(99, 102, 241, 0.05); padding: 15px; border-radius: 25px; text-align: center; border: 1px dashed #2e3b5e; margin-bottom: 20px; }
         .task-header-box p { margin: 0; font-size: 13px; color: #7c8ba1; }
-        
         .item-row { background: #141d30; padding: 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1f2937; margin-bottom: 12px; }
         .task-left-section { display: flex; align-items: center; gap: 14px; }
-        
-        /* Web Icon matching the screenshot */
         .web-icon-container { background: #111a2e; border: 1px solid #243454; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
         .web-icon-container i { color: #22d3ee; font-size: 26px; }
-        
         .task-title { font-size: 15px; font-weight: bold; color: white; margin-bottom: 4px; }
         .task-reward { font-size: 13px; color: #10b981; font-weight: 600; }
         
-        .task-timer-btn { background: #222c3f; color: #94a3b8; border: none; padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; min-width: 85px; text-align: center; }
-        
-        /* Refer Card */
-        .refer-card { background: linear-gradient(135deg, #10b981, #059669); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
+        /* Premium Purple/Blue Start Button */
+        .btn-start-task { background: #5b60f5; color: white; border: none; padding: 10px 22px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 12px rgba(91, 96, 245, 0.3); }
+        .btn-start-task:hover { background: #484cd1; }
+        .btn-disabled { background: #222c3f !important; color: #64748b !important; box-shadow: none !important; cursor: not-allowed; }
 
-        /* Form Controls */
+        /* Video/Ad Modal Styles */
+        .ad-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 10, 20, 0.95); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; }
+        .ad-video-box { width: 85%; max-width: 400px; background: #161f33; border: 1px solid #2e3b5e; border-radius: 24px; padding: 30px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .ad-player-simulation { width: 100%; height: 180px; background: #090d16; border-radius: 16px; margin: 20px 0; display: flex; justify-content: center; align-items: center; border: 1px solid #1f2937; position: relative; overflow: hidden; }
+        .ad-player-simulation i { font-size: 60px; color: #6366f1; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
+        .ad-timer-count { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; color: #22d3ee; }
+
+        /* Refer, Wallet & Nav Styles */
+        .refer-card { background: linear-gradient(135deg, #10b981, #059669); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
         .form-input { width: 100%; padding: 15px; background: #0b1426; border: 1px solid #1f2937; border-radius: 12px; color: white; margin-top: 10px; box-sizing: border-box; }
         .btn-green { width: 100%; padding: 18px; background: #16a34a; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; }
         .btn-blue { width: 100%; background: #6366f1; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-
-        /* Payment Methods Grid */
         .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
         .method-box { background: #0b1426; padding: 12px; border-radius: 12px; text-align: center; font-size: 11px; border: 1px solid #1f2937; cursor: pointer; }
         .method-box.selected { border-color: #6366f1; background: rgba(99,102,241,0.1); }
-
-        /* Navigation Bar */
         .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1f2937; z-index: 999; }
         .nav-item { text-align: center; color: #4b5563; font-size: 11px; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
         .nav-item.active { color: #6366f1; }
         .nav-item i { font-size: 24px; margin-bottom: 4px; }
-
-        /* Withdraw List Item */
-        .withdraw-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1f2937; }
-        .withdraw-list-item:last-child { border-bottom: none; }
-        .status-success { color: #10b981; font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <div id="home" class="page active-page">
-        <div class="top-header">
-            <div class="profile-section">
-                <div class="profile-circle" id="user-avatar">Y</div>
-                <div class="user-name" id="display-name">Guest User</div>
-            </div>
-            <div class="header-balance">
-                <span>Total Balance</span>
-                <strong>$36.790</strong>
-            </div>
+    <div class="global-header">
+        <div class="profile-section">
+            <div class="profile-circle" id="user-avatar">Y</div>
+            <div class="user-name" id="display-name">Guest User</div>
         </div>
-        
+        <div class="header-balance">
+            <span>Total Balance</span>
+            <strong id="main-balance">$36.790</strong>
+        </div>
+    </div>
+
+    <div id="home" class="page active-page">
         <div class="stats-row-grid">
             <div class="stat-small-box">
                 <strong>$0.000</strong>
                 <span>Withdrawn</span>
             </div>
             <div class="stat-small-box">
-                <strong>621</strong>
+                <strong id="ads-watched-count">621</strong>
                 <span>Ads Watched</span>
             </div>
             <div class="stat-small-box">
@@ -105,42 +97,30 @@
             </div>
         </div>
 
-        <div class="card-box">
-            <p style="margin:0 0 15px 0; font-weight:bold; display: flex; align-items: center; gap: 6px;">
-                <i class="material-icons" style="color: #6366f1; font-size: 18px;">bar_chart</i> Income Stats (7D)
-            </p>
-            <canvas id="incomeChart" height="145"></canvas>
-        </div>
+        <div style="padding: 0 20px;">
+            <button class="btn-blue" style="background: #f59e0b; padding: 18px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="startAdWatch(0)">
+                <i class="material-icons">flash_on</i> Watch Pop Up Ad
+            </button>
 
-        <div class="card-box">
-            <p style="margin: 0 0 15px 0; font-weight: bold; display: flex; align-items: center; gap: 8px;">
-                <i class="material-icons" style="color: #10b981; font-size: 18px;">history</i> Withdraw History
-            </p>
-            <div id="last-withdrawals">
-                <div class="withdraw-list-item">
-                    <div>
-                        <div style="font-size: 13px; font-weight: bold;">bKash (017******82)</div>
-                        <div style="font-size: 11px; opacity: 0.5;">2 hours ago</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 13px; font-weight: bold;">$10.50</div>
-                        <div class="status-success">Success</div>
-                    </div>
-                </div>
+            <div class="card-box">
+                <p style="margin:0 0 15px 0; font-weight:bold; display: flex; align-items: center; gap: 6px;">
+                    <i class="material-icons" style="color: #6366f1; font-size: 18px;">bar_chart</i> Income Stats (7D)
+                </p>
+                <canvas id="incomeChart" height="145"></canvas>
             </div>
         </div>
     </div>
 
     <div id="task" class="page">
-        <h2 style="margin-top: 0; margin-bottom: 15px;">Tasks</h2>
-        <div class="task-header-box">
-            <p>All tasks reset every 24 hours.</p>
+        <div class="task-container-padding">
+            <div class="task-header-box">
+                <p>All tasks reset every 24 hours.</p>
+            </div>
+            <div id="task-list"></div>
         </div>
-        <div id="task-list"></div>
     </div>
 
-    <div id="refer" class="page">
-        <h2>Refer</h2>
+    <div id="refer" class="page" style="padding: 20px;">
         <div class="refer-card">
             <p style="font-size: 16px; margin-bottom: 20px;">Invite friends and earn bonus for every join.</p>
             <div style="display: flex; gap: 30px;">
@@ -155,7 +135,7 @@
         </div>
     </div>
 
-    <div id="wallet" class="page">
+    <div id="wallet" class="page" style="padding: 20px;">
         <h2>Withdrawal</h2>
         <div class="card-box">
             <p style="margin:0; font-size:14px; opacity:0.8;">Select Payment Method</p>
@@ -164,17 +144,24 @@
                 <div class="method-box" onclick="sM(this)">Binance</div>
                 <div class="method-box" onclick="sM(this)">USDT</div>
                 <div class="method-box" onclick="sM(this)">Litecoin</div>
-                <div class="method-box" onclick="sM(this)">Webmoney</div>
-                <div class="method-box" onclick="sM(this)">M-PESA</div>
+            </div>
+            <input type="text" class="form-input" placeholder="Enter wallet address">
+            <input type="number" class="form-input" value="5000">
+            <button class="btn-green" onclick="tg.showAlert('Withdrawal Submitted!')">Withdraw Now</button>
+        </div>
+    </div>
+
+    <div id="ad-modal-window" class="ad-modal">
+        <div class="ad-video-box">
+            <h3 style="margin: 0; color: white;">Loading Premium Video Ad</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin: 5px 0 0 0;">Do not close or minimize the app</p>
+            
+            <div class="ad-player-simulation">
+                <div class="ad-timer-count" id="ad-countdown-text">30s</div>
+                <i class="material-icons">play_circle_filled</i>
             </div>
             
-            <p style="margin:15px 0 0 0; font-size:14px; opacity:0.8;">Account Details</p>
-            <input type="text" class="form-input" placeholder="Enter number or wallet address">
-            
-            <p style="margin:15px 0 0 0; font-size:14px; opacity:0.8;">Points to Withdraw (Min 5000)</p>
-            <input type="number" class="form-input" value="5000">
-
-            <button class="btn-green" onclick="tg.showAlert('Withdrawal Request Submitted!')">Withdraw Now</button>
+            <p style="font-size: 13px; color: #10b981; font-weight: bold; margin: 0;">Watching this earns you $0.050</p>
         </div>
     </div>
 
@@ -190,25 +177,30 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        // রিয়েল-টাইম ডাটা ট্র্যাকিং স্টেট
+        let currentBalance = 36.790;
+        let adsWatchedCount = 621;
+        let completedTasks = []; 
+
+        function updateUIBalances() {
+            document.getElementById('main-balance').innerText = `$${currentBalance.toFixed(3)}`;
+            document.getElementById('ads-watched-count').innerText = adsWatchedCount;
+        }
+
         function initTelegramUser() {
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const user = tg.initDataUnsafe.user;
-                const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
-                document.getElementById('display-name').innerText = fullName || "Telegram User";
-
+                document.getElementById('display-name').innerText = `${user.first_name || ''} ${user.last_name || ''}`.trim();
                 const avatarElement = document.getElementById('user-avatar');
                 if (user.photo_url) {
                     avatarElement.innerHTML = `<img src="${user.photo_url}" alt="Profile">`;
                 } else {
-                    const firstLetter = user.first_name ? user.first_name.charAt(0) : "U";
-                    avatarElement.innerText = firstLetter;
-                    const colors = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#3b82f6'];
-                    avatarElement.style.backgroundColor = colors[user.id % colors.length];
+                    avatarElement.innerText = user.first_name ? user.first_name.charAt(0) : "U";
                 }
             } else {
                 document.getElementById('display-name').innerText = "Demo Yeachin";
-                document.getElementById('user-avatar').innerText = "D";
             }
+            updateUIBalances();
         }
 
         initTelegramUser();
@@ -222,16 +214,13 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        // 10টি Web Visit টাস্ক জেনারেট করার নতুন ফাংশন (রিওয়ার্ড $0.050)
+        // ১০টি রেগুলার টাস্ক জেনারেট করা হচ্ছে (Start বাটন সহ)
         function renderTasks() {
             const list = document.getElementById('task-list');
             list.innerHTML = ""; 
             
-            // ডেমো টাইমার বা কাউন্টার স্ট্রিং তৈরি (স্ক্রিনশটের মতো ২২:৪৩:৪৩ রেঞ্জে রাখার জন্য)
             for(let i = 1; i <= 10; i++) {
-                let secondOffset = (40 + i) % 60;
-                let mockTimer = `22:43:${secondOffset.toString().padStart(2, '0')}`;
-                
+                const isDone = completedTasks.includes(i);
                 list.innerHTML += `
                 <div class="item-row">
                     <div class="task-left-section">
@@ -244,16 +233,53 @@
                         </div>
                     </div>
                     <div>
-                        <button class="task-timer-btn">${mockTimer}</button>
+                        <button class="btn-start-task ${isDone ? 'btn-disabled' : ''}" 
+                                onclick="${isDone ? '' : `startAdWatch(${i})`}">
+                            ${isDone ? 'Completed' : 'Start'}
+                        </button>
                     </div>
                 </div>`;
             }
         }
 
+        // অ্যাড দেখা এবং ব্যালেন্স যোগ করার মূল কোর লজিক
+        function startAdWatch(taskId) {
+            const modal = document.getElementById('ad-modal-window');
+            const timerText = document.getElementById('ad-countdown-text');
+            modal.style.display = 'flex';
+            
+            let timeLeft = 30; // ৩০ সেকেন্ডের রিয়েল কাউন্টডাউন
+            timerText.innerText = `${timeLeft}s`;
+
+            tg.HapticFeedback.notificationOccurred('warning');
+
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                timerText.innerText = `${timeLeft}s`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    modal.style.display = 'none';
+                    
+                    // সফলভাবে অ্যাড দেখা শেষ হলে ডাটা আপডেট
+                    currentBalance += 0.050;
+                    adsWatchedCount += 1;
+                    
+                    if(taskId !== 0) {
+                        completedTasks.push(taskId); // নির্দিষ্ট টাস্কটি কমপ্লিট হিসেবে সেভ করা হলো
+                        renderTasks(); // টাস্ক পেজ রিফ্রেশ
+                    }
+                    
+                    updateUIBalances(); // গ্লোবাল হেডারে ব্যালেন্স রিফ্রেশ
+                    tg.showAlert("Success! You earned $0.050");
+                    tg.HapticFeedback.notificationOccurred('success');
+                }
+            }, 1000);
+        }
+
         function sM(el) {
             document.querySelectorAll('.method-box').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
-            tg.HapticFeedback.selectionChanged();
         }
 
         const uid = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "6026482193";
@@ -262,8 +288,7 @@
         
         function copyL() { 
             navigator.clipboard.writeText(link); 
-            tg.showAlert("Referral Link Copied!"); 
-            tg.HapticFeedback.notificationOccurred('success');
+            tg.showAlert("Copied!"); 
         }
 
         const ctx = document.getElementById('incomeChart').getContext('2d');
@@ -273,8 +298,9 @@
                 labels: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                 datasets: [{ data: [0, 1.15, 1.15, 1.2, 1.2, 2.11, 1.05], backgroundColor: '#6366f1', borderRadius: 5 }]
             },
-            options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#94a3b8' } } } }
+            options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
         });
     </script>
 </body>
 </html>
+
