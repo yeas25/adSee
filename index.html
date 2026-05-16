@@ -49,13 +49,10 @@
         .btn-start-task:hover { background: #484cd1; }
         .btn-disabled { background: #222c3f !important; color: #64748b !important; box-shadow: none !important; cursor: not-allowed; }
 
-        /* Video/Ad Modal Styles */
-        .ad-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 10, 20, 0.95); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; }
-        .ad-video-box { width: 85%; max-width: 400px; background: #161f33; border: 1px solid #2e3b5e; border-radius: 24px; padding: 30px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .ad-player-simulation { width: 100%; height: 180px; background: #090d16; border-radius: 16px; margin: 20px 0; display: flex; justify-content: center; align-items: center; border: 1px solid #1f2937; position: relative; overflow: hidden; }
-        .ad-player-simulation i { font-size: 60px; color: #6366f1; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
-        .ad-timer-count { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; color: #22d3ee; }
+        /* Withdraw List Item Styling */
+        .withdraw-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1f2937; }
+        .withdraw-list-item:last-child { border-bottom: none; }
+        .status-success { color: #10b981; font-weight: bold; font-size: 12px; }
 
         /* Refer & Withdraw Styles */
         .refer-card { background: linear-gradient(135deg, #10b981, #059669); padding: 25px; border-radius: 25px; margin-bottom: 20px; }
@@ -102,15 +99,39 @@
             </div>
         </div>
 
-        <button class="btn-blue" style="background: #f59e0b; padding: 18px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="startAdWatch(0)">
-            <i class="material-icons">flash_on</i> Watch Pop Up Ad
-        </button>
-
         <div class="card-box">
             <p style="margin:0 0 15px 0; font-weight:bold; display: flex; align-items: center; gap: 6px;">
                 <i class="material-icons" style="color: #6366f1; font-size: 18px;">bar_chart</i> Income Stats (7D)
             </p>
             <canvas id="incomeChart" height="145"></canvas>
+        </div>
+
+        <div class="card-box">
+            <p style="margin: 0 0 15px 0; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                <i class="material-icons" style="color: #10b981; font-size: 18px;">history</i> Withdraw History
+            </p>
+            <div id="last-withdrawals">
+                <div class="withdraw-list-item">
+                    <div>
+                        <div style="font-size: 13px; font-weight: bold;">bKash (017******82)</div>
+                        <div style="font-size: 11px; opacity: 0.5;">2 hours ago</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 13px; font-weight: bold;">$10.500</div>
+                        <div class="status-success">Success</div>
+                    </div>
+                </div>
+                <div class="withdraw-list-item">
+                    <div>
+                        <div style="font-size: 13px; font-weight: bold;">Binance Wallet</div>
+                        <div style="font-size: 11px; opacity: 0.5;">Yesterday</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 13px; font-weight: bold;">$5.000</div>
+                        <div class="status-success">Success</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -160,31 +181,20 @@
         </div>
     </div>
 
-    <div id="ad-modal-window" class="ad-modal">
-        <div class="ad-video-box">
-            <h3 style="margin: 0; color: white;">Loading Premium Video Ad</h3>
-            <p style="font-size: 12px; color: #94a3b8; margin: 5px 0 0 0;">Do not close or minimize the app</p>
-            
-            <div class="ad-player-simulation">
-                <div class="ad-timer-count" id="ad-countdown-text">30s</div>
-                <i class="material-icons">play_circle_filled</i>
-            </div>
-            
-            <p style="font-size: 13px; color: #10b981; font-weight: bold; margin: 0;">Watching this earns you $0.050</p>
-        </div>
-    </div>
-
     <nav class="nav-bar">
         <div class="nav-item active" onclick="nav('home', this)"><i class="material-icons">home</i>Home</div>
         <div class="nav-item" onclick="nav('task', this)"><i class="material-icons">list_alt</i>Tasks</div>
         <div class="nav-item" onclick="nav('refer', this)"><i class="material-icons">people</i>Refer</div>
-        <div class="nav-item" onclick="nav('wallet', this)"><i class="material-icons">account_balance_wallet</i>Wallet</div>
+        <div class="nav-item" onclick="nav('wallet', this)."><i class="material-icons">account_balance_wallet</i>Wallet</div>
         <div class="nav-item" onclick="nav('home', this)"><i class="material-icons">person</i>Profile</div>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+
+        // আপনার প্রোভাইড করা লাইভ Monetag ডিরেক্ট লিঙ্ক সেট করা হলো
+        const MONETAG_DIRECT_LINK = "https://omg10.com/4/11005394";
 
         let currentBalance = 36.790;
         let adsWatchedCount = 621;
@@ -213,7 +223,6 @@
 
         initTelegramUser();
 
-        // ডাইনামিক পেজ নেভিগেশন এবং প্রোফাইল শো/হাইড লজিক
         function nav(pId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -221,7 +230,6 @@
             document.getElementById(pId).classList.add('active-page');
             el.classList.add('active');
 
-            // শর্ত: শুধুমাত্র হোম পেজে প্রোফাইল ব্লকটি দৃশ্যমান থাকবে
             const profileBlock = document.getElementById('header-profile-block');
             if (pId === 'home') {
                 profileBlock.style.display = 'flex';
@@ -252,7 +260,7 @@
                     </div>
                     <div>
                         <button class="btn-start-task ${isDone ? 'btn-disabled' : ''}" 
-                                onclick="${isDone ? '' : `startAdWatch(${i})`}">
+                                onclick="${isDone ? '' : `triggerMonetagAd(${i})`}">
                             ${isDone ? 'Completed' : 'Start'}
                         </button>
                     </div>
@@ -260,37 +268,25 @@
             }
         }
 
-        function startAdWatch(taskId) {
-            const modal = document.getElementById('ad-modal-window');
-            const timerText = document.getElementById('ad-countdown-text');
-            modal.style.display = 'flex';
-            
-            let timeLeft = 30;
-            timerText.innerText = `${timeLeft}s`;
-
+        // Monetag Ad ওপেন এবং ব্যালেন্স ইন্টিগ্রেশন
+        function triggerMonetagAd(taskId) {
             tg.HapticFeedback.notificationOccurred('warning');
+            
+            // Monetag ডিরেক্ট লিঙ্ক পপআপ হিসেবে ওপেন হবে 
+            window.open(MONETAG_DIRECT_LINK, '_blank');
 
-            const countdownInterval = setInterval(() => {
-                timeLeft--;
-                timerText.innerText = `${timeLeft}s`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(countdownInterval);
-                    modal.style.display = 'none';
-                    
-                    currentBalance += 0.050;
-                    adsWatchedCount += 1;
-                    
-                    if(taskId !== 0) {
-                        completedTasks.push(taskId);
-                        renderTasks();
-                    }
-                    
-                    updateUIBalances();
-                    tg.showAlert("Success! You earned $0.050");
-                    tg.HapticFeedback.notificationOccurred('success');
-                }
-            }, 1000);
+            // ১.৫ সেকেন্ড ডিলে দিয়ে টাস্ক কমপ্লিট ও ব্যালেন্স ক্রেডিট সিকিউর করা হচ্ছে
+            setTimeout(() => {
+                currentBalance += 0.050;
+                adsWatchedCount += 1;
+                completedTasks.push(taskId);
+                
+                renderTasks();
+                updateUIBalances();
+                
+                tg.showAlert("Success! $0.050 added to your balance.");
+                tg.HapticFeedback.notificationOccurred('success');
+            }, 1500);
         }
 
         function sM(el) {
@@ -319,3 +315,4 @@
     </script>
 </body>
 </html>
+
