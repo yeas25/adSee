@@ -250,7 +250,7 @@
                     avatarElement.innerText = user.first_name ? user.first_name.charAt(0) : "U";
                 }
             } else {
-                document.getElementById('display-name').innerText = "Demo Yeachin";
+                document.getElementById('display-name').innerText = "Yeachin Arafat";
             }
             updateUIBalances();
         }
@@ -274,7 +274,7 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
-        /* CPAGrip Offerwall Function */
+        /* CPAGrip Offerwall Function with Live User Tracking */
         function openCPAGripOfferwall() {
             tg.HapticFeedback.impactOccurred('medium');
             const telegramUserId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "Guest";
@@ -286,7 +286,7 @@
             }
         }
 
-        /* CPAlead Mobile Offerwall Function */
+        /* CPAlead Offerwall Function with Updated Direct Link & Tracking */
         function openCPALeadOfferwall() {
             tg.HapticFeedback.impactOccurred('medium');
             const telegramUserId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "Guest";
@@ -324,3 +324,4 @@
     </script>
 </body>
 </html>
+
