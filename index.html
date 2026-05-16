@@ -16,7 +16,11 @@
         /* Header Style */
         .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 5px 0; }
         .profile-section { display: flex; align-items: center; gap: 12px; }
-        .profile-circle { background: #6366f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        
+        /* Dynamic Profile Picture From Telegram */
+        .profile-circle { background: #6366f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: white; text-transform: uppercase; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3); overflow: hidden; }
+        .profile-circle img { width: 100%; height: 100%; object-fit: cover; }
+        
         .user-name { font-size: 16px; font-weight: bold; color: white; }
         .header-balance { text-align: right; }
         .header-balance span { font-size: 11px; opacity: 0.6; display: block; }
@@ -62,8 +66,8 @@
     <div id="home" class="page active-page">
         <div class="top-header">
             <div class="profile-section">
-                <div class="profile-circle"><i class="material-icons">person</i></div>
-                <div class="user-name" id="display-name">Yeachin</div>
+                <div class="profile-circle" id="user-avatar">Y</div>
+                <div class="user-name" id="display-name">Guest User</div>
             </div>
             <div class="header-balance">
                 <span>Total Balance</span>
@@ -217,10 +221,39 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // টেলিগ্রাম থেকে ইউজারের ফার্স্ট নেম নেওয়া, না থাকলে ডিফল্ট Yeachin দেখাবে
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            document.getElementById('display-name').innerText = tg.initDataUnsafe.user.first_name;
+        // --- টেলিগ্রাম অটোমেটিক ইউজার ডাটা লজিক ---
+        function initTelegramUser() {
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const user = tg.initDataUnsafe.user;
+                
+                // ১. নাম অটো লোড (First Name + Last Name)
+                const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+                document.getElementById('display-name').innerText = fullName || "Telegram User";
+
+                // ২. অটোমেটিক প্রোফাইল পিকচার / অবতার জেনারেশন
+                const avatarElement = document.getElementById('user-avatar');
+                if (user.photo_url) {
+                    // যদি টেলিগ্রামের সিকিউর ইউআরএল পাওয়া যায় তবে ইমেজ দেখাবে
+                    avatarElement.innerHTML = `<img src="${user.photo_url}" alt="Profile">`;
+                } else {
+                    // অন্যথায় নামের প্রথম অক্ষর দিয়ে প্রিমিয়াম স্টাইলিশ অবতার তৈরি হবে
+                    const firstLetter = user.first_name ? user.first_name.charAt(0) : "U";
+                    avatarElement.innerText = firstLetter;
+                    
+                    // একেক ইউজারের জন্য একেক কালার র্যান্ডম সেট হবে যাতে দেখতে সুন্দর লাগে
+                    const colors = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#3b82f6', '#8b5cf6'];
+                    const randomColor = colors[user.id % colors.length];
+                    avatarElement.style.backgroundColor = randomColor;
+                }
+            } else {
+                // ব্রাউজারে টেস্ট করার জন্য ডিফল্ট ডাটা
+                document.getElementById('display-name').innerText = "Demo Yeachin";
+                document.getElementById('user-avatar').innerText = "D";
+            }
         }
+
+        // অ্যাপ চালু হওয়ার সাথে সাথে কল হবে
+        initTelegramUser();
 
         function nav(pId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
@@ -281,4 +314,3 @@
     </script>
 </body>
 </html>
-    
