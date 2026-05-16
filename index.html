@@ -34,7 +34,7 @@
         .stat-small-box span { font-size: 11px; opacity: 0.6; }
         .card-box { background: #161f33; padding: 20px; border-radius: 20px; border: 1px solid #1f2937; margin-bottom: 15px; }
         
-        /* Task Styling Matching Screenshots */
+        /* Task Styling */
         .task-header-box { background: rgba(99, 102, 241, 0.05); padding: 15px; border-radius: 25px; text-align: center; border: 1px dashed #2e3b5e; margin-bottom: 20px; }
         .task-header-box p { margin: 0; font-size: 13px; color: #7c8ba1; }
         .item-row { background: #141d30; padding: 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1f2937; margin-bottom: 12px; }
@@ -44,14 +44,12 @@
         .task-title { font-size: 15px; font-weight: bold; color: white; margin-bottom: 4px; }
         .task-reward { font-size: 13px; color: #10b981; font-weight: 600; }
         
-        /* Premium Buttons & Countdown Boxes */
+        /* Buttons & Countdown Boxes */
         .btn-start-task { background: #5b60f5; color: white; border: none; padding: 10px 22px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 12px rgba(91, 96, 245, 0.3); min-width: 90px; text-align: center; }
         .btn-start-task:hover { background: #484cd1; }
         .btn-disabled { background: #222c3f !important; color: #64748b !important; box-shadow: none !important; cursor: not-allowed; }
         
-        /* Screenshot-matched Countdown Lock Style */
         .timer-lock-box { background: #374151; color: #e5e7eb; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: bold; min-width: 90px; text-align: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); letter-spacing: 0.5px; }
-        /* Red/Pink color for Countdown Text below locked box */
         .lock-timer-subtext { color: #ec4899; font-size: 11px; font-weight: bold; display: block; text-align: center; margin-top: 4px; }
 
         /* Withdraw List Item Styling */
@@ -142,8 +140,50 @@
 
     <div id="task" class="page">
         <div class="task-header-box">
-            <p>All tasks reset every 24 hours.</p>
+            <p>All tasks reset every 24 hours. Complete high paying offerwalls to earn more points!</p>
         </div>
+
+        <div class="card-box" style="border-color: #5b60f5;">
+            <p style="margin: 0 0 12px 0; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                <i class="material-icons" style="color: #22d3ee; font-size: 20px;">layers</i> CPAGrip Mega Tasks
+            </p>
+            <div class="item-row" style="background: rgba(99, 102, 241, 0.05); border: 1px solid #2e3b5e; margin-bottom: 0;">
+                <div class="task-left-section">
+                    <div class="web-icon-container" style="background: #1e1b4b;">
+                        <i class="material-icons" style="color: #6366f1;">stars</i>
+                    </div>
+                    <div>
+                        <div class="task-title">High Paying Offers</div>
+                        <div class="task-reward">Play Games & Surveys</div>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn-start-task" onclick="openCPAGripOfferwall()" style="background: #5b60f5; box-shadow: 0 4px 12px rgba(91, 96, 245, 0.3);">Open</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-box" style="border-color: #10b981;">
+            <p style="margin: 0 0 12px 0; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                <i class="material-icons" style="color: #10b981; font-size: 20px;">monetization_on</i> CPAlead Premium Tasks
+            </p>
+            <div class="item-row" style="background: rgba(16, 185, 129, 0.05); border: 1px solid #10b981; margin-bottom: 0;">
+                <div class="task-left-section">
+                    <div class="web-icon-container" style="background: #064e3b;">
+                        <i class="material-icons" style="color: #10b981;">bolt</i>
+                    </div>
+                    <div>
+                        <div class="task-title">Fast Paying Offers</div>
+                        <div class="task-reward">Complete Apps & Shorts</div>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn-start-task" onclick="openCPALeadOfferwall()" style="background: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">Open</button>
+                </div>
+            </div>
+        </div>
+
+        <p style="margin: 20px 0 10px 5px; font-weight: bold; color: #7c8ba1;">Daily Web Visits</p>
         <div id="task-list"></div>
     </div>
 
@@ -203,10 +243,9 @@
         let currentBalance = 36.790;
         let adsWatchedCount = 621;
         
-        // টাস্ক স্টেট ট্র্যাকিং (১ নম্বর সবসময় প্রথম টাস্ক হিসেবে আনলক থাকবে)
         let completedTasks = []; 
         let runningTimers = {}; 
-        let taskStartTimes = {}; // টাস্ক শুরু করার সঠিক সময় ট্র্যাক করার জন্য
+        let taskStartTimes = {}; 
 
         function updateUIBalances() {
             document.getElementById('global-balance-text').innerText = `$${currentBalance.toFixed(3)}`;
@@ -249,6 +288,30 @@
             tg.HapticFeedback.impactOccurred('light');
         }
 
+        /* CPAGrip Offerwall Trigger Function */
+        function openCPAGripOfferwall() {
+            tg.HapticFeedback.impactOccurred('medium');
+            const telegramUserId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "Guest";
+            const cpaGripLink = `https://www.cpagrip.com/view.php?id=1896274&tracking_id=${telegramUserId}`;
+            if (tg.openLink) {
+                tg.openLink(cpaGripLink);
+            } else {
+                window.open(cpaGripLink, '_blank');
+            }
+        }
+
+        /* CPAlead Offerwall Trigger Function */
+        function openCPALeadOfferwall() {
+            tg.HapticFeedback.impactOccurred('medium');
+            const telegramUserId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "Guest";
+            const cpaLeadLink = `https://www.qckclk.com/wall/naSN0v8?subid=${telegramUserId}`;
+            if (tg.openLink) {
+                tg.openLink(cpaLeadLink);
+            } else {
+                window.open(cpaLeadLink, '_blank');
+            }
+        }
+
         function renderTasks() {
             const list = document.getElementById('task-list');
             list.innerHTML = ""; 
@@ -256,8 +319,6 @@
             for(let i = 1; i <= 10; i++) {
                 const isDone = completedTasks.includes(i);
                 const isRunning = runningTimers[i] !== undefined;
-                
-                // সিরিয়াল ওয়াইজ লক লজিক: আগের টাস্ক কমপ্লিট না হওয়া পর্যন্ত পরের টাস্ক লক থাকবে
                 const isLockedBySequence = i > 1 && !completedTasks.includes(i - 1);
                 
                 let buttonHTML = '';
@@ -271,7 +332,6 @@
                         <span class="lock-timer-subtext">${displayTime}</span>
                     `;
                 } else if (isLockedBySequence) {
-                    // স্ক্রিনশটের মতো লক করা বাটন এবং নিচে টেক্সট ভিউ ভিউ
                     buttonHTML = `
                         <div class="timer-lock-box btn-disabled">Locked</div>
                         <span class="lock-timer-subtext">00:00:30</span>
@@ -287,7 +347,7 @@
                             <i class="material-icons">language</i>
                         </div>
                         <div>
-                            <div class="task-title">Web Visit 30s</div>
+                            <div class="task-title">Web Visit 30s (${i})</div>
                             <div class="task-reward">Reward: $0.100</div>
                         </div>
                     </div>
@@ -298,12 +358,10 @@
             }
         }
 
-        // সিকিউর অ্যাড লোড এবং মিনিমাম ১৫ সেকেন্ড স্ট্রে ভ্যালিডেশন মেকানিজম
         function triggerMonetagAd(taskId) {
             tg.HapticFeedback.notificationOccurred('warning');
-            
             let adOpened = false;
-            taskStartTimes[taskId] = Date.now(); // ক্লিক করার টাইমস্ট্যাম্প সেভ
+            taskStartTimes[taskId] = Date.now();
 
             try {
                 if (tg.openLink) {
@@ -317,7 +375,6 @@
                 adOpened = false;
             }
 
-            // অ্যাড উইন্ডো ওপেন না হলে রিওয়ার্ড বাতিল
             if (!adOpened) {
                 tg.showAlert("Ad failed to load! Please try again.");
                 return;
@@ -331,25 +388,21 @@
                 duration--;
                 if (duration <= 0) {
                     clearInterval(countdown);
-                    
-                    // ভ্যালিডেশন চেক: টাস্ক শেষ হওয়ার পর চেক করা হবে ইউজার আসলেই মিনিমাম ১৫ সেকেন্ড অন্য পেজে ছিল কিনা
                     let timeSpent = (Date.now() - taskStartTimes[taskId]) / 1000;
                     
                     if (timeSpent < 15) {
-                        // ইউজার যদি ১৫ সেকেন্ডের আগেই ব্যাক চলে আসে বা অ্যাড রিডাইরেক্ট না হয়
                         delete runningTimers[taskId];
                         delete taskStartTimes[taskId];
                         renderTasks();
                         tg.showAlert("Task Failed! You must view the ad for at least 15 seconds.");
                         tg.HapticFeedback.notificationOccurred('error');
                     } else {
-                        // সফলভাবে সম্পন্ন হলে
                         delete runningTimers[taskId];
                         delete taskStartTimes[taskId];
                         
                         currentBalance += 0.100;
                         adsWatchedCount += 1;
-                        completedTasks.push(taskId); // এই টাস্কটি কমপ্লিট লিস্টে যাবে, ফলে পরবর্তী টাস্ক আনলক হবে
+                        completedTasks.push(taskId);
                         
                         renderTasks();
                         updateUIBalances();
