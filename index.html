@@ -15,12 +15,14 @@
 
         /* Header Style */
         .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 5px 0; }
+        .profile-section { display: flex; align-items: center; gap: 12px; }
         .profile-circle { background: #6366f1; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .user-name { font-size: 16px; font-weight: bold; color: white; }
         .header-balance { text-align: right; }
         .header-balance span { font-size: 11px; opacity: 0.6; display: block; }
         .header-balance strong { font-size: 22px; color: #6366f1; font-weight: bold; }
 
-        /* Stats Grid (Below Balance Card) */
+        /* Stats Grid */
         .stats-row-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
         .stat-small-box { background: #161f33; padding: 15px 10px; border-radius: 18px; text-align: center; border: 1px solid #1f2937; }
         .stat-small-box strong { font-size: 16px; font-weight: bold; display: block; margin-bottom: 4px; }
@@ -59,7 +61,10 @@
 
     <div id="home" class="page active-page">
         <div class="top-header">
-            <div class="profile-circle"><i class="material-icons">person</i></div>
+            <div class="profile-section">
+                <div class="profile-circle"><i class="material-icons">person</i></div>
+                <div class="user-name" id="display-name">Yeachin</div>
+            </div>
             <div class="header-balance">
                 <span>Total Balance</span>
                 <strong>$36.790</strong>
@@ -212,6 +217,11 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        // টেলিগ্রাম থেকে ইউজারের ফার্স্ট নেম নেওয়া, না থাকলে ডিফল্ট Yeachin দেখাবে
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('display-name').innerText = tg.initDataUnsafe.user.first_name;
+        }
+
         function nav(pId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -259,7 +269,6 @@
             tg.HapticFeedback.notificationOccurred('success');
         }
 
-        // 7D Chart Setup
         const ctx = document.getElementById('incomeChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
@@ -272,4 +281,4 @@
     </script>
 </body>
 </html>
-
+    
