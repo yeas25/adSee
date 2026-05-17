@@ -304,7 +304,7 @@
     <div class="page-title">👥 Refer & Earn</div>
     <div class="refer-banner">
         <div style="font-size:15px;font-weight:600;">Invite friends, earn together!</div>
-        <div style="font-size:12px;color:#7a92d4;margin-top:6px;">Earn $0.050 for every friend who joins via your link</div>
+        <div style="font-size:12px;color:#7a92d4;margin-top:6px;">Earn <strong style="color:var(--accent2)">4%</strong> of every offer your friend completes!</div>
         <div class="refer-stats">
             <div class="refer-stat"><strong id="ref-count">0</strong><span>Referrals</span></div>
             <div class="refer-stat"><strong id="ref-earned">$0.000</strong><span>Earned</span></div>
@@ -329,8 +329,9 @@
         <div style="font-size:13px;color:var(--muted);line-height:2;">
             1️⃣ Copy your referral link<br>
             2️⃣ Share in groups or with friends<br>
-            3️⃣ Friend opens bot via your link<br>
-            4️⃣ You earn <strong style="color:var(--accent2)">$0.050</strong> instantly ✅
+            3️⃣ Friend joins via your link<br>
+            4️⃣ Friend completes offers & earns<br>
+            5️⃣ You earn <strong style="color:var(--accent2)">4%</strong> of their earnings automatically ✅
         </div>
     </div>
 </div>
@@ -458,33 +459,40 @@ function init() {
 
 // ── Referral Credit ────────────────────────────────────────
 function creditReferrer(referrerId, newUserId, newUser) {
-    // Load referrer data and add bonus
-    const refKey = 'adsee_v2_data';
-    // Notify admin
     const newName = newUser ? `${newUser.first_name || ''} ${newUser.last_name || ''}`.trim() : newUserId;
     sendToBot(ADMIN_ID, `👥 New Referral!\nReferrer ID: ${referrerId}\nNew User: ${newName} (${newUserId})`);
-    sendToBot(referrerId, `🎉 Someone joined via your link!\n+$0.050 added to your balance!\nNew user: ${newName}`);
+    sendToBot(referrerId, `🎉 Someone joined via your link!\nUser: ${newName}\nYou will earn 4% of their offer earnings!`);
 
-    // If referrer is current user (same device), credit them
+    // Store referral info in referrer's data (same device)
     const existingRaw = localStorage.getItem(USER_KEY);
     if (existingRaw) {
         try {
             const existingData = JSON.parse(existingRaw);
             if (existingData.uid === referrerId) {
-                existingData.balance = parseFloat((existingData.balance + 0.050).toFixed(3));
-                existingData.refEarned = parseFloat((existingData.refEarned + 0.050).toFixed(3));
                 existingData.referrals += 1;
                 existingData.refList = existingData.refList || [];
                 existingData.refList.push({
                     name: newName,
                     id: newUserId,
                     time: new Date().toLocaleString('en-BD'),
-                    earned: 0.050
+                    earned: 0,
+                    commission: 0.04
                 });
                 localStorage.setItem(USER_KEY, JSON.stringify(existingData));
             }
         } catch(e) {}
     }
+}
+
+// Call this when a referred user earns money (4% commission to referrer)
+function payReferralCommission(earnedAmount) {
+    const startParam = tg.initDataUnsafe.start_param;
+    if (!startParam || startParam === userData.uid) return;
+    const commission = parseFloat((earnedAmount * 0.04).toFixed(3));
+    if (commission <= 0) return;
+    // Notify referrer via bot
+    sendToBot(startParam, `💸 Referral Commission!\nYour friend completed an offer!\nYou earned: +$${commission.toFixed(3)} (4%)`);
+    sendToBot(ADMIN_ID, `💸 Commission Due\nReferrer: ${startParam}\nAmount: $${commission.toFixed(3)}`);
 }
 
 // ── Update UI ──────────────────────────────────────────────
@@ -518,7 +526,10 @@ function renderRefList() {
                 <div class="ref-name">${r.name || 'User'}</div>
                 <div class="ref-time">${r.time}</div>
             </div>
-            <div class="ref-earn">+$${r.earned.toFixed(3)}</div>
+            <div style="text-align:right;">
+                <div class="ref-earn">4% commission</div>
+                <div style="font-size:10px;color:var(--muted);">Active</div>
+            </div>
         </div>`).join('');
 }
 
@@ -612,6 +623,8 @@ function awardBonus(amount) {
     updateUI();
     buildChart();
     showToast(`+$${amount.toFixed(3)} added! ✅`);
+    // Pay 4% commission to referrer
+    payReferralCommission(amount);
 }
 
 // ── Withdraw ───────────────────────────────────────────────
