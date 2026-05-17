@@ -11,7 +11,6 @@
     <style>
         :root {
             --bg: #080d1a;
-            --bg2: #0f1829;
             --bg3: #141f35;
             --card: #111827;
             --border: #1e2d47;
@@ -20,18 +19,15 @@
             --accent3: #f7c948;
             --text: #e8eaf6;
             --muted: #5a6a85;
-            --danger: #f43f5e;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         html, body { height: 100%; overflow: hidden; }
         body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; }
 
-        /* Scrollable Content */
         .page { display: none; height: calc(100vh - 65px); overflow-y: auto; padding: 0 16px 20px; }
         .page.active-page { display: block; }
         .page::-webkit-scrollbar { display: none; }
 
-        /* Header */
         .global-header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 14px 16px 10px; background: var(--bg); position: sticky; top: 0; z-index: 100;
@@ -46,32 +42,27 @@
         .balance-label { font-size: 10px; color: var(--muted); }
         .balance-val { font-size: 22px; font-weight: 700; color: var(--accent2); font-family: 'JetBrains Mono', monospace; letter-spacing: -1px; }
 
-        /* Cards */
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 16px; margin-bottom: 14px; }
-        .card-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+        .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
 
-        /* Stats */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0; }
         .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; padding: 14px 8px; text-align: center; }
         .stat-val { font-size: 17px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
         .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 4px; }
 
-        /* Task Items */
-        .task-item { background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; transition: border-color 0.2s; }
-        .task-item:active { border-color: var(--accent); }
+        .task-item { background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .task-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
         .task-info .task-name { font-size: 14px; font-weight: 600; }
         .task-info .task-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
-        .task-reward-badge { background: rgba(6,214,160,0.12); color: var(--accent2); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
 
-        /* Buttons */
-        .btn { border: none; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-        .btn-primary { background: var(--accent); color: white; padding: 12px 20px; font-size: 14px; width: 100%; }
-        .btn-primary:active { opacity: 0.85; transform: scale(0.98); }
-        .btn-green { background: var(--accent2); color: #080d1a; padding: 15px; font-size: 15px; width: 100%; margin-top: 16px; border-radius: 14px; }
-        .btn-open { background: var(--accent); color: white; padding: 9px 18px; font-size: 13px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+        .btn-open { border: none; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; cursor: pointer; background: var(--accent); color: white; padding: 9px 18px; font-size: 13px; }
+        .btn-soon { border: none; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; cursor: not-allowed; padding: 9px 18px; font-size: 13px; opacity: 0.5; }
+        .btn-primary { background: var(--accent); color: white; border: none; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; cursor: pointer; padding: 12px 20px; font-size: 14px; width: 100%; }
+        .btn-green { background: var(--accent2); color: #080d1a; border: none; border-radius: 14px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; cursor: pointer; padding: 15px; font-size: 15px; width: 100%; margin-top: 16px; }
 
-        /* Withdraw History */
+        .badge-live { font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-left: 6px; font-weight: 700; }
+        .badge-upcoming { font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-left: 6px; font-weight: 700; }
+
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
         .history-item:last-child { border: none; }
         .history-method { font-size: 13px; font-weight: 600; }
@@ -80,12 +71,20 @@
         .badge-success { font-size: 10px; color: var(--accent2); font-weight: 700; }
         .badge-pending { font-size: 10px; color: var(--accent3); font-weight: 700; }
 
-        /* Refer */
+        /* Referral */
         .refer-banner { background: linear-gradient(135deg, #0f3460, #1a1a6e); border: 1px solid #2a3a7a; border-radius: 18px; padding: 20px; margin-bottom: 14px; }
         .refer-stats { display: flex; gap: 30px; margin-top: 14px; }
         .refer-stat strong { font-size: 20px; font-weight: 700; color: var(--accent2); }
         .refer-stat span { font-size: 11px; color: var(--muted); display: block; }
         .link-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 11px; color: var(--accent); word-break: break-all; margin: 12px 0; font-family: 'JetBrains Mono', monospace; }
+
+        /* Referral List */
+        .ref-list-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .ref-list-item:last-child { border: none; }
+        .ref-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+        .ref-name { font-size: 13px; font-weight: 600; }
+        .ref-time { font-size: 11px; color: var(--muted); }
+        .ref-earn { font-size: 13px; font-weight: 700; color: var(--accent2); font-family: 'JetBrains Mono', monospace; margin-left: auto; }
 
         /* Wallet */
         .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
@@ -94,29 +93,18 @@
         .form-input { width: 100%; padding: 13px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: 'Space Grotesk', sans-serif; margin-top: 8px; outline: none; }
         .form-input:focus { border-color: var(--accent); }
         .form-label { font-size: 12px; color: var(--muted); margin-top: 14px; display: block; }
-
-        /* Min withdraw info */
         .min-info { background: rgba(247,201,72,0.08); border: 1px solid rgba(247,201,72,0.2); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--accent3); margin: 12px 0; }
 
-        /* Nav */
+        .notice { background: rgba(79,110,247,0.08); border: 1px dashed rgba(79,110,247,0.3); border-radius: 12px; padding: 12px; font-size: 12px; color: #7a92d4; text-align: center; margin-bottom: 14px; }
+        .page-title { font-size: 20px; font-weight: 700; margin: 16px 0 14px; }
+
         .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 10px 0 14px; border-top: 1px solid var(--border); z-index: 999; }
-        .nav-item { text-align: center; color: var(--muted); font-size: 10px; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; transition: color 0.2s; }
+        .nav-item { text-align: center; color: var(--muted); font-size: 10px; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
         .nav-item.active { color: var(--accent); }
         .nav-item i { font-size: 22px; }
 
-        /* Notice Banner */
-        .notice { background: rgba(79,110,247,0.08); border: 1px dashed rgba(79,110,247,0.3); border-radius: 12px; padding: 12px; font-size: 12px; color: #7a92d4; text-align: center; margin-bottom: 14px; }
-
-        /* Toast */
         .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%) translateY(-20px); background: var(--accent2); color: #080d1a; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 700; z-index: 9999; opacity: 0; transition: all 0.3s; pointer-events: none; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        /* Animations */
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .page.active-page > * { animation: fadeUp 0.3s ease forwards; }
-
-        /* Page title */
-        .page-title { font-size: 20px; font-weight: 700; margin: 16px 0 14px; }
     </style>
 </head>
 <body>
@@ -153,16 +141,14 @@
             <div class="stat-lbl">Referrals</div>
         </div>
     </div>
-
     <div class="card">
         <div class="card-title"><i class="material-icons-round" style="font-size:16px;color:var(--accent)">bar_chart</i> Income (7 Days)</div>
         <canvas id="incomeChart" height="130"></canvas>
     </div>
-
     <div class="card">
         <div class="card-title"><i class="material-icons-round" style="font-size:16px;color:var(--accent2)">history</i> Recent Withdrawals</div>
         <div id="withdraw-history-home">
-            <div style="text-align:center; color:var(--muted); font-size:13px; padding:20px 0;">No withdrawals yet</div>
+            <div style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;">No withdrawals yet</div>
         </div>
     </div>
 </div>
@@ -170,26 +156,14 @@
 <!-- TASKS -->
 <div id="task" class="page">
     <div class="page-title">💼 Tasks</div>
-    <div class="notice">Complete offers below to earn real money instantly!</div>
+    <div class="notice">📱 Complete mobile offers below to earn real money instantly!</div>
 
-    <div class="card" style="border-color: rgba(79,110,247,0.4);">
-        <div class="card-title"><i class="material-icons-round" style="font-size:16px;color:var(--accent)">stars</i> CPAGrip Offers</div>
-        <div class="task-item">
-            <div style="display:flex;align-items:center;">
-                <div class="task-icon" style="background:rgba(79,110,247,0.12);">
-                    <i class="material-icons-round" style="color:var(--accent);font-size:24px;">videogame_asset</i>
-                </div>
-                <div class="task-info">
-                    <div class="task-name">Play & Earn</div>
-                    <div class="task-desc">Games, Surveys & Apps</div>
-                </div>
-            </div>
-            <button class="btn-open" onclick="openCPAGrip()">Open</button>
+    <!-- CPAlead LIVE -->
+    <div class="card" style="border-color:rgba(6,214,160,0.4);">
+        <div class="card-title">
+            <i class="material-icons-round" style="font-size:16px;color:var(--accent2)">bolt</i> CPAlead
+            <span class="badge-live" style="background:var(--accent2);color:#080d1a;">✅ LIVE</span>
         </div>
-    </div>
-
-    <div class="card" style="border-color: rgba(6,214,160,0.4);">
-        <div class="card-title"><i class="material-icons-round" style="font-size:16px;color:var(--accent2)">bolt</i> CPAlead Offers</div>
         <div class="task-item">
             <div style="display:flex;align-items:center;">
                 <div class="task-icon" style="background:rgba(6,214,160,0.1);">
@@ -204,19 +178,123 @@
         </div>
     </div>
 
-    <div class="card" style="border-color: rgba(247,201,72,0.3);">
-        <div class="card-title"><i class="material-icons-round" style="font-size:16px;color:var(--accent3)">poll</i> Daily Check-in</div>
+    <!-- CPAGrip LIVE -->
+    <div class="card" style="border-color:rgba(79,110,247,0.4);">
+        <div class="card-title">
+            <i class="material-icons-round" style="font-size:16px;color:var(--accent)">stars</i> CPAGrip
+            <span class="badge-live" style="background:var(--accent);color:white;">✅ LIVE</span>
+        </div>
         <div class="task-item">
             <div style="display:flex;align-items:center;">
-                <div class="task-icon" style="background:rgba(247,201,72,0.1);">
-                    <i class="material-icons-round" style="color:var(--accent3);font-size:24px;">today</i>
+                <div class="task-icon" style="background:rgba(79,110,247,0.12);">
+                    <i class="material-icons-round" style="color:var(--accent);font-size:24px;">videogame_asset</i>
                 </div>
                 <div class="task-info">
-                    <div class="task-name">Daily Bonus</div>
-                    <div class="task-desc">Claim $0.010 every 24h</div>
+                    <div class="task-name">Play & Earn</div>
+                    <div class="task-desc">Games, Surveys & Apps</div>
                 </div>
             </div>
-            <button class="btn-open" style="background:var(--accent3);color:#080d1a;" id="checkin-btn" onclick="dailyCheckin()">Claim</button>
+            <button class="btn-open" onclick="openCPAGrip()">Open</button>
+        </div>
+    </div>
+
+    <!-- Torox UPCOMING -->
+    <div class="card" style="border-color:rgba(139,92,246,0.3);opacity:0.75;">
+        <div class="card-title">
+            <i class="material-icons-round" style="font-size:16px;color:#8b5cf6">rocket_launch</i> Torox
+            <span class="badge-upcoming" style="background:#8b5cf6;color:white;">⏳ UPCOMING</span>
+        </div>
+        <div class="task-item">
+            <div style="display:flex;align-items:center;">
+                <div class="task-icon" style="background:rgba(139,92,246,0.1);">
+                    <i class="material-icons-round" style="color:#8b5cf6;font-size:24px;">auto_awesome</i>
+                </div>
+                <div class="task-info">
+                    <div class="task-name">Premium Tasks</div>
+                    <div class="task-desc">Coming soon...</div>
+                </div>
+            </div>
+            <button class="btn-soon" style="background:#8b5cf6;color:white;">Soon</button>
+        </div>
+    </div>
+
+    <!-- Monlix UPCOMING -->
+    <div class="card" style="border-color:rgba(245,158,11,0.3);opacity:0.75;">
+        <div class="card-title">
+            <i class="material-icons-round" style="font-size:16px;color:#f59e0b">toll</i> Monlix
+            <span class="badge-upcoming" style="background:#f59e0b;color:#080d1a;">⏳ UPCOMING</span>
+        </div>
+        <div class="task-item">
+            <div style="display:flex;align-items:center;">
+                <div class="task-icon" style="background:rgba(245,158,11,0.1);">
+                    <i class="material-icons-round" style="color:#f59e0b;font-size:24px;">monetization_on</i>
+                </div>
+                <div class="task-info">
+                    <div class="task-name">Quick Tasks</div>
+                    <div class="task-desc">Coming soon...</div>
+                </div>
+            </div>
+            <button class="btn-soon" style="background:#f59e0b;color:#080d1a;">Soon</button>
+        </div>
+    </div>
+
+    <!-- Lootably UPCOMING -->
+    <div class="card" style="border-color:rgba(168,85,247,0.3);opacity:0.75;">
+        <div class="card-title">
+            <i class="material-icons-round" style="font-size:16px;color:#a855f7">workspace_premium</i> Lootably
+            <span class="badge-upcoming" style="background:#a855f7;color:white;">⏳ UPCOMING</span>
+        </div>
+        <div class="task-item">
+            <div style="display:flex;align-items:center;">
+                <div class="task-icon" style="background:rgba(168,85,247,0.1);">
+                    <i class="material-icons-round" style="color:#a855f7;font-size:24px;">emoji_events</i>
+                </div>
+                <div class="task-info">
+                    <div class="task-name">Premium Offers</div>
+                    <div class="task-desc">Coming soon...</div>
+                </div>
+            </div>
+            <button class="btn-soon" style="background:#a855f7;color:white;">Soon</button>
+        </div>
+    </div>
+
+    <!-- Adscend UPCOMING -->
+    <div class="card" style="border-color:rgba(20,184,166,0.3);opacity:0.75;">
+        <div class="card-title">
+            <i class="material-icons-round" style="font-size:16px;color:#14b8a6">trending_up</i> Adscend Media
+            <span class="badge-upcoming" style="background:#14b8a6;color:white;">⏳ UPCOMING</span>
+        </div>
+        <div class="task-item">
+            <div style="display:flex;align-items:center;">
+                <div class="task-icon" style="background:rgba(20,184,166,0.1);">
+                    <i class="material-icons-round" style="color:#14b8a6;font-size:24px;">bar_chart</i>
+                </div>
+                <div class="task-info">
+                    <div class="task-name">Mobile Surveys</div>
+                    <div class="task-desc">Coming soon...</div>
+                </div>
+            </div>
+            <button class="btn-soon" style="background:#14b8a6;color:white;">Soon</button>
+        </div>
+    </div>
+
+    <!-- ayeT UPCOMING -->
+    <div class="card" style="border-color:rgba(251,113,133,0.3);opacity:0.75;">
+        <div class="card-title">
+            <i class="material-icons-round" style="font-size:16px;color:#fb7185">local_offer</i> ayeT-Studios
+            <span class="badge-upcoming" style="background:#fb7185;color:white;">⏳ UPCOMING</span>
+        </div>
+        <div class="task-item">
+            <div style="display:flex;align-items:center;">
+                <div class="task-icon" style="background:rgba(251,113,133,0.1);">
+                    <i class="material-icons-round" style="color:#fb7185;font-size:24px;">redeem</i>
+                </div>
+                <div class="task-info">
+                    <div class="task-name">Rewarded Offers</div>
+                    <div class="task-desc">Coming soon...</div>
+                </div>
+            </div>
+            <button class="btn-soon" style="background:#fb7185;color:white;">Soon</button>
         </div>
     </div>
 </div>
@@ -226,24 +304,33 @@
     <div class="page-title">👥 Refer & Earn</div>
     <div class="refer-banner">
         <div style="font-size:15px;font-weight:600;">Invite friends, earn together!</div>
-        <div style="font-size:12px;color:#7a92d4;margin-top:6px;">Earn $0.050 for every friend who joins</div>
+        <div style="font-size:12px;color:#7a92d4;margin-top:6px;">Earn $0.050 for every friend who joins via your link</div>
         <div class="refer-stats">
             <div class="refer-stat"><strong id="ref-count">0</strong><span>Referrals</span></div>
             <div class="refer-stat"><strong id="ref-earned">$0.000</strong><span>Earned</span></div>
         </div>
     </div>
+
     <div class="card">
         <div class="card-title">Your Referral Link</div>
         <div class="link-box" id="ref-link">Loading...</div>
-        <button class="btn btn-primary" onclick="copyRefLink()">📋 Copy Link</button>
+        <button class="btn-primary" onclick="copyRefLink()">📋 Copy Link</button>
     </div>
+
+    <div class="card">
+        <div class="card-title"><i class="material-icons-round" style="font-size:16px;">group</i> Referral List</div>
+        <div id="ref-list-container">
+            <div style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;">No referrals yet</div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-title">How it works</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.8;">
-            1️⃣ Share your referral link<br>
-            2️⃣ Friend joins via your link<br>
-            3️⃣ You earn <strong style="color:var(--accent2)">$0.050</strong> instantly<br>
-            4️⃣ Withdraw when balance ≥ $1.000
+        <div style="font-size:13px;color:var(--muted);line-height:2;">
+            1️⃣ Copy your referral link<br>
+            2️⃣ Share in groups or with friends<br>
+            3️⃣ Friend opens bot via your link<br>
+            4️⃣ You earn <strong style="color:var(--accent2)">$0.050</strong> instantly ✅
         </div>
     </div>
 </div>
@@ -260,26 +347,21 @@
             <i class="material-icons-round" style="font-size:40px;color:var(--border)">account_balance_wallet</i>
         </div>
         <div class="min-info">⚠️ Minimum withdrawal: <strong>$1.000</strong></div>
-
         <span class="form-label">Payment Method</span>
         <div class="method-grid">
             <div class="method-box" onclick="selectMethod(this,'bKash')">bKash</div>
+            <div class="method-box" onclick="selectMethod(this,'Nagad')">Nagad</div>
+            <div class="method-box" onclick="selectMethod(this,'Rocket')">Rocket</div>
             <div class="method-box" onclick="selectMethod(this,'Binance')">Binance</div>
             <div class="method-box" onclick="selectMethod(this,'USDT')">USDT</div>
             <div class="method-box" onclick="selectMethod(this,'Litecoin')">Litecoin</div>
-            <div class="method-box" onclick="selectMethod(this,'Nagad')">Nagad</div>
-            <div class="method-box" onclick="selectMethod(this,'Rocket')">Rocket</div>
         </div>
-
         <span class="form-label">Account / Wallet Address</span>
         <input type="text" class="form-input" id="withdraw-account" placeholder="Enter number or address">
-
         <span class="form-label">Amount (Min $1.000)</span>
         <input type="number" class="form-input" id="withdraw-amount" placeholder="1.000" step="0.001" min="1">
-
-        <button class="btn btn-green" onclick="submitWithdraw()">Withdraw Now →</button>
+        <button class="btn-green" onclick="submitWithdraw()">Withdraw Now →</button>
     </div>
-
     <div class="card">
         <div class="card-title"><i class="material-icons-round" style="font-size:16px;">receipt_long</i> Withdrawal History</div>
         <div id="withdraw-history-wallet">
@@ -288,7 +370,6 @@
     </div>
 </div>
 
-<!-- NAV -->
 <nav class="nav-bar">
     <div class="nav-item active" onclick="nav('home',this)"><i class="material-icons-round">home</i>Home</div>
     <div class="nav-item" onclick="nav('task',this)"><i class="material-icons-round">task_alt</i>Tasks</div>
@@ -301,8 +382,11 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 tg.setHeaderColor('#080d1a');
 
-// ── State ──────────────────────────────────────────────────
-const USER_KEY = 'adsee_user_data';
+const BOT_TOKEN = '8833015131:AAH1oiiNt55BJ5k21EOZ3o7WYtmmPqo7zns';
+const ADMIN_ID = '6026482193';
+const BOT_USERNAME = 'Adsee1_bot';
+
+const USER_KEY = 'adsee_v2_data';
 let userData = loadData();
 let selectedMethod = '';
 let chartInstance = null;
@@ -315,7 +399,7 @@ function defaultData(uid) {
         tasksDone: 0,
         referrals: 0,
         refEarned: 0.000,
-        lastCheckin: null,
+        refList: [],
         withdrawHistory: [],
         incomeHistory: [0,0,0,0,0,0,0]
     };
@@ -331,23 +415,23 @@ function loadData() {
 function saveData() {
     localStorage.setItem(USER_KEY, JSON.stringify(userData));
 }
-// ── Init ───────────────────────────────────────────────────
+
 function init() {
     const tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user;
-    const uid = tgUser ? String(tgUser.id) : '6026482193';
+    const uid = tgUser ? String(tgUser.id) : ADMIN_ID;
 
     if (!userData || userData.uid !== uid) {
         userData = defaultData(uid);
-        // Check referral from start param
+
+        // Check referral
         const startParam = tg.initDataUnsafe.start_param;
         if (startParam && startParam !== uid) {
-            // New user joined via referral — reward referrer via bot
-            sendReferralToBot(startParam, uid);
+            creditReferrer(startParam, uid, tgUser);
         }
         saveData();
     }
 
-    // UI: Name & Avatar
+    // Setup UI
     if (tgUser) {
         const name = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim();
         document.getElementById('display-name').innerText = name || 'User';
@@ -363,15 +447,47 @@ function init() {
         document.getElementById('display-id').innerText = `ID: ${uid}`;
     }
 
-    // Referral link
-    const refLink = `https://t.me/Adsee1_bot?start=${uid}`;
+    // Referral link - opens bot directly
+    const refLink = `https://t.me/${BOT_USERNAME}?startapp=${uid}`;
     document.getElementById('ref-link').innerText = refLink;
 
     updateUI();
     buildChart();
-    checkCheckinBtn();
+    renderRefList();
 }
 
+// ── Referral Credit ────────────────────────────────────────
+function creditReferrer(referrerId, newUserId, newUser) {
+    // Load referrer data and add bonus
+    const refKey = 'adsee_v2_data';
+    // Notify admin
+    const newName = newUser ? `${newUser.first_name || ''} ${newUser.last_name || ''}`.trim() : newUserId;
+    sendToBot(ADMIN_ID, `👥 New Referral!\nReferrer ID: ${referrerId}\nNew User: ${newName} (${newUserId})`);
+    sendToBot(referrerId, `🎉 Someone joined via your link!\n+$0.050 added to your balance!\nNew user: ${newName}`);
+
+    // If referrer is current user (same device), credit them
+    const existingRaw = localStorage.getItem(USER_KEY);
+    if (existingRaw) {
+        try {
+            const existingData = JSON.parse(existingRaw);
+            if (existingData.uid === referrerId) {
+                existingData.balance = parseFloat((existingData.balance + 0.050).toFixed(3));
+                existingData.refEarned = parseFloat((existingData.refEarned + 0.050).toFixed(3));
+                existingData.referrals += 1;
+                existingData.refList = existingData.refList || [];
+                existingData.refList.push({
+                    name: newName,
+                    id: newUserId,
+                    time: new Date().toLocaleString('en-BD'),
+                    earned: 0.050
+                });
+                localStorage.setItem(USER_KEY, JSON.stringify(existingData));
+            }
+        } catch(e) {}
+    }
+}
+
+// ── Update UI ──────────────────────────────────────────────
 function updateUI() {
     document.getElementById('global-balance').innerText = `$${userData.balance.toFixed(3)}`;
     document.getElementById('wallet-balance').innerText = `$${userData.balance.toFixed(3)}`;
@@ -381,6 +497,29 @@ function updateUI() {
     document.getElementById('ref-count').innerText = userData.referrals;
     document.getElementById('ref-earned').innerText = `$${userData.refEarned.toFixed(3)}`;
     renderWithdrawHistory();
+    renderRefList();
+}
+
+// ── Referral List ──────────────────────────────────────────
+function renderRefList() {
+    const list = userData.refList || [];
+    const el = document.getElementById('ref-list-container');
+    if (!el) return;
+
+    if (list.length === 0) {
+        el.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;">No referrals yet<br><span style="font-size:11px;">Share your link to earn $0.050 per referral!</span></div>`;
+        return;
+    }
+
+    el.innerHTML = list.slice().reverse().map(r => `
+        <div class="ref-list-item">
+            <div class="ref-avatar">${(r.name || 'U').charAt(0).toUpperCase()}</div>
+            <div>
+                <div class="ref-name">${r.name || 'User'}</div>
+                <div class="ref-time">${r.time}</div>
+            </div>
+            <div class="ref-earn">+$${r.earned.toFixed(3)}</div>
+        </div>`).join('');
 }
 
 // ── Chart ──────────────────────────────────────────────────
@@ -394,12 +533,7 @@ function buildChart() {
             labels: days,
             datasets: [{
                 data: userData.incomeHistory,
-                backgroundColor: ctx => {
-                    const gradient = ctx.chart.ctx.createLinearGradient(0,0,0,120);
-                    gradient.addColorStop(0, 'rgba(79,110,247,0.8)');
-                    gradient.addColorStop(1, 'rgba(79,110,247,0.1)');
-                    return gradient;
-                },
+                backgroundColor: 'rgba(79,110,247,0.7)',
                 borderRadius: 6,
                 borderSkipped: false
             }]
@@ -411,8 +545,7 @@ function buildChart() {
             scales: {
                 y: { display: false },
                 x: { grid: { display: false }, ticks: { color: '#5a6a85', font: { size: 10 } } }
-            },
-            animation: { duration: 600 }
+            }
         }
     });
 }
@@ -420,34 +553,26 @@ function buildChart() {
 // ── Withdraw History ───────────────────────────────────────
 function renderWithdrawHistory() {
     const history = userData.withdrawHistory;
-    const homeEl = document.getElementById('withdraw-history-home');
-    const walletEl = document.getElementById('withdraw-history-wallet');
-
-    if (history.length === 0) {
-        homeEl.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;">No withdrawals yet</div>`;
-        walletEl.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;">No withdrawals yet</div>`;
-        return;
-    }
-
-    const html = history.slice().reverse().map(w => `
-        <div class="history-item">
-            <div>
-                <div class="history-method">${w.method} (${maskAccount(w.account)})</div>
-                <div class="history-time">${w.time}</div>
-            </div>
-            <div style="text-align:right;">
-                <div class="history-amount">$${w.amount.toFixed(3)}</div>
-                <div class="${w.status === 'Success' ? 'badge-success' : 'badge-pending'}">${w.status}</div>
-            </div>
-        </div>`).join('');
-    homeEl.innerHTML = html;
-    walletEl.innerHTML = html;
+    const html = history.length === 0
+        ? `<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;">No withdrawals yet</div>`
+        : history.slice().reverse().map(w => `
+            <div class="history-item">
+                <div>
+                    <div class="history-method">${w.method} (${maskAccount(w.account)})</div>
+                    <div class="history-time">${w.time}</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="history-amount">$${w.amount.toFixed(3)}</div>
+                    <div class="${w.status === 'Success' ? 'badge-success' : 'badge-pending'}">${w.status}</div>
+                </div>
+            </div>`).join('');
+    document.getElementById('withdraw-history-home').innerHTML = html;
+    document.getElementById('withdraw-history-wallet').innerHTML = html;
 }
 
 function maskAccount(acc) {
-    if (!acc) return '***';
-    if (acc.length <= 4) return acc;
-    return acc.substring(0, 3) + '***' + acc.substring(acc.length - 2);
+    if (!acc || acc.length <= 4) return acc || '***';
+    return acc.substring(0,3) + '***' + acc.substring(acc.length - 2);
 }
 
 // ── Navigation ─────────────────────────────────────────────
@@ -459,22 +584,17 @@ function nav(pageId, el) {
     try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
 }
 
-// ── Task Offerwalls ────────────────────────────────────────
-function openCPAGrip() {
-    try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
-    const uid = userData.uid;
-    const url = `https://www.cpagrip.com/view.php?id=1896274&tracking_id=${uid}`;
-    openUrl(url);
-    // Award task completion bonus
-    awardTaskBonus(0.050);
-}
-
+// ── Offerwalls ─────────────────────────────────────────────
 function openCPALead() {
     try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
-    const uid = userData.uid;
-    const url = `https://akamaicdn.org/wall/r4mWAd?subid=${uid}`;
-    openUrl(url);
-    awardTaskBonus(0.030);
+    openUrl(`https://akamaicdn.org/wall/r4mWAd?subid=${userData.uid}&device=mobile`);
+    awardBonus(0.030);
+}
+
+function openCPAGrip() {
+    try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+    openUrl(`https://www.cpagrip.com/view.php?id=2527808&tracking_id=${userData.uid}`);
+    awardBonus(0.050);
 }
 
 function openUrl(url) {
@@ -482,10 +602,9 @@ function openUrl(url) {
     else window.open(url, '_blank');
 }
 
-function awardTaskBonus(amount) {
+function awardBonus(amount) {
     userData.balance = parseFloat((userData.balance + amount).toFixed(3));
     userData.tasksDone += 1;
-    // Update today's income in chart
     const day = new Date().getDay();
     const idx = day === 0 ? 6 : day - 1;
     userData.incomeHistory[idx] = parseFloat((userData.incomeHistory[idx] + amount).toFixed(3));
@@ -493,38 +612,6 @@ function awardTaskBonus(amount) {
     updateUI();
     buildChart();
     showToast(`+$${amount.toFixed(3)} added! ✅`);
-}
-
-// ── Daily Check-in ─────────────────────────────────────────
-function checkCheckinBtn() {
-    const btn = document.getElementById('checkin-btn');
-    if (canCheckin()) {
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        btn.innerText = 'Claim';
-    } else {
-        btn.disabled = true;
-        btn.style.opacity = '0.4';
-        btn.innerText = 'Done ✓';
-    }
-}
-
-function canCheckin() {
-    if (!userData.lastCheckin) return true;
-    const last = new Date(userData.lastCheckin);
-    const now = new Date();
-    return now.toDateString() !== last.toDateString();
-}
-
-function dailyCheckin() {
-    if (!canCheckin()) { showToast('Already claimed today!'); return; }
-    userData.balance = parseFloat((userData.balance + 0.010).toFixed(3));
-    userData.lastCheckin = new Date().toISOString();
-    saveData();
-    updateUI();
-    checkCheckinBtn();
-    showToast('+$0.010 Daily bonus! 🎉');
-    try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
 }
 
 // ── Withdraw ───────────────────────────────────────────────
@@ -537,7 +624,6 @@ function selectMethod(el, method) {
 function submitWithdraw() {
     const account = document.getElementById('withdraw-account').value.trim();
     const amount = parseFloat(document.getElementById('withdraw-amount').value);
-
     if (!selectedMethod) { showToast('Select a payment method!'); return; }
     if (!account) { showToast('Enter account/wallet address!'); return; }
     if (!amount || amount < 1.0) { showToast('Minimum withdrawal is $1.000!'); return; }
@@ -545,59 +631,39 @@ function submitWithdraw() {
 
     userData.balance = parseFloat((userData.balance - amount).toFixed(3));
     userData.totalWithdrawn = parseFloat((userData.totalWithdrawn + amount).toFixed(2));
-
-    const now = new Date();
     userData.withdrawHistory.push({
         method: selectedMethod,
         account: account,
         amount: amount,
-        time: now.toLocaleString('en-BD'),
+        time: new Date().toLocaleString('en-BD'),
         status: 'Pending'
     });
-
     saveData();
     updateUI();
 
-    // Send to bot (optional)
-    sendWithdrawToBot(selectedMethod, account, amount);
+    sendToBot(ADMIN_ID, `💰 Withdraw Request\nUser: ${userData.uid}\nMethod: ${selectedMethod}\nAccount: ${account}\nAmount: $${amount.toFixed(3)}`);
 
     document.getElementById('withdraw-account').value = '';
     document.getElementById('withdraw-amount').value = '';
     document.querySelectorAll('.method-box').forEach(b => b.classList.remove('selected'));
     selectedMethod = '';
-
     showToast('Withdrawal submitted! ✅');
     try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
 }
 
-// ── Referral ───────────────────────────────────────────────
+// ── Refer ──────────────────────────────────────────────────
 function copyRefLink() {
-    const link = document.getElementById('ref-link').innerText;
+    const link = `https://t.me/${BOT_USERNAME}?startapp=${userData.uid}`;
     navigator.clipboard.writeText(link).then(() => showToast('Link copied! 📋'));
     try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
 }
 
-// ── Bot Communication (optional webhook) ──────────────────
-function sendWithdrawToBot(method, account, amount) {
-    // Send notification to your bot via Telegram sendMessage API
-    // You need to set your bot token and your own Telegram chat ID
-    const BOT_TOKEN = 'YOUR_BOT_TOKEN'; // Replace with your bot token
-    const ADMIN_CHAT_ID = 'YOUR_CHAT_ID'; // Replace with your Telegram ID
-    const msg = `💰 Withdraw Request\nUser: ${userData.uid}\nMethod: ${method}\nAccount: ${account}\nAmount: $${amount.toFixed(3)}`;
+// ── Bot Notification ───────────────────────────────────────
+function sendToBot(chatId, msg) {
     fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: ADMIN_CHAT_ID, text: msg })
-    }).catch(() => {});
-}
-
-function sendReferralToBot(referrerId, newUserId) {
-    const BOT_TOKEN = 'YOUR_BOT_TOKEN';
-    const msg = `👥 New Referral!\nReferrer: ${referrerId}\nNew User: ${newUserId}`;
-    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: referrerId, text: '🎉 Someone joined via your link! +$0.050 added to your balance!' })
+        body: JSON.stringify({ chat_id: chatId, text: msg })
     }).catch(() => {});
 }
 
@@ -609,7 +675,6 @@ function showToast(msg) {
     setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ── Start ──────────────────────────────────────────────────
 init();
 </script>
 </body>
